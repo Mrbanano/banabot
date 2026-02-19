@@ -45,12 +45,40 @@ exec(command: str, working_dir: str = None) -> str
 ## Web Access
 
 ### web_search
-Search the web using Brave Search API.
+Search the web using configurable search providers.
+
 ```
 web_search(query: str, count: int = 5) -> str
 ```
 
-Returns search results with titles, URLs, and snippets. Requires `tools.web.search.apiKey` in config.
+**Supported providers:**
+| Provider | API Key Required | Notes |
+|----------|-----------------|-------|
+| `duckduckgo` (default) | No | Free, works out-of-the-box |
+| `brave` | Yes | Brave Search API |
+| `tavily` | Yes | Optimized for AI agents |
+| `serper` | Yes | Google Search API |
+| `searxng` | No (self-hosted) | Requires `apiBase` config |
+
+**Configuration** (`~/.nanobot/config.json`):
+```json
+{
+  "tools": {
+    "web": {
+      "search": {
+        "defaultProvider": "duckduckgo",
+        "maxResults": 5,
+        "providers": {
+          "brave": { "apiKey": "YOUR_KEY", "enabled": true },
+          "duckduckgo": { "enabled": true }
+        }
+      }
+    }
+  }
+}
+```
+
+Returns search results with titles, URLs, and snippets.
 
 ### web_fetch
 Fetch and extract main content from a URL.

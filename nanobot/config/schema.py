@@ -231,11 +231,61 @@ class GatewayConfig(Base):
     port: int = 18790
 
 
+class SearchProviderConfig(Base):
+    """Configuration for a single search provider."""
+
+    api_key: str = ""
+    api_base: str = ""
+    enabled: bool = True
+
+
+class SearchProvidersConfig(Base):
+    """All search providers configuration."""
+
+    duckduckgo: SearchProviderConfig = Field(
+        default_factory=lambda: SearchProviderConfig(enabled=True)
+    )
+    brave: SearchProviderConfig = Field(default_factory=SearchProviderConfig)
+    tavily: SearchProviderConfig = Field(default_factory=SearchProviderConfig)
+    serper: SearchProviderConfig = Field(default_factory=SearchProviderConfig)
+    searxng: SearchProviderConfig = Field(default_factory=SearchProviderConfig)
+
+    def get_active_provider(
+        self, default_provider: str
+    ) -> tuple[str, SearchProviderConfig]:
+        """Return the active provider: default if configured and valid, else first available."""
+        from nanobot.agent.tools.search_registry import SEARCH_PROVIDERS, find_search_provider
+
+        def _is_valid(name: str, cfg: SearchProviderConfig) -> bool:
+            if not cfg.enabled:
+                return False
+            spec = find_search_provider(name)
+            if not spec:
+                return False
+            if spec.requires_api_key and not cfg.api_key:
+                return False
+            if name == "searxng" and not cfg.api_base:
+                return False
+            return True
+
+        default_cfg = getattr(self, default_provider, None)
+        if default_cfg and _is_valid(default_provider, default_cfg):
+            return default_provider, default_cfg
+
+        for spec in SEARCH_PROVIDERS:
+            cfg = getattr(self, spec.name, None)
+            if cfg and _is_valid(spec.name, cfg):
+                return spec.name, cfg
+
+        return default_provider, default_cfg or SearchProviderConfig()
+
+
 class WebSearchConfig(Base):
     """Web search tool configuration."""
 
-    api_key: str = ""  # Brave Search API key
+    default_provider: str = "duckduckgo"
     max_results: int = 5
+    providers: SearchProvidersConfig = Field(default_factory=SearchProvidersConfig)
 
 
 class WebToolsConfig(Base):
