@@ -1,4 +1,4 @@
-"""Utility functions for nanobot."""
+"""Utility functions for banobot."""
 
 from banobot.utils.helpers import ensure_dir, get_workspace_path, get_data_path
 

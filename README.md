@@ -1,18 +1,15 @@
 <div align="center">
-  <img src="nanobot_logo.png" alt="nanobot" width="500">
-  <h1>nanobot: Ultra-Lightweight Personal AI Assistant</h1>
+  <img src="banobot_logo.png" alt="banobot" width="500">
+  <h1>banobot: Ultra-Lightweight Personal AI Assistant</h1>
   <p>
-    <a href="https://pypi.org/project/nanobot-ai/"><img src="https://img.shields.io/pypi/v/nanobot-ai" alt="PyPI"></a>
-    <a href="https://pepy.tech/project/nanobot-ai"><img src="https://static.pepy.tech/badge/nanobot-ai" alt="Downloads"></a>
+    <a href="https://pypi.org/project/banobot-ai/"><img src="https://img.shields.io/pypi/v/banobot-ai" alt="PyPI"></a>
+    <a href="https://pepy.tech/project/banobot-ai"><img src="https://static.pepy.tech/badge/banobot-ai" alt="Downloads"></a>
     <img src="https://img.shields.io/badge/python-≥3.11-blue" alt="Python">
     <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
-    <a href="./COMMUNICATION.md"><img src="https://img.shields.io/badge/Feishu-Group-E9DBFC?style=flat&logo=feishu&logoColor=white" alt="Feishu"></a>
-    <a href="./COMMUNICATION.md"><img src="https://img.shields.io/badge/WeChat-Group-C5EAB4?style=flat&logo=wechat&logoColor=white" alt="WeChat"></a>
-    <a href="https://discord.gg/MnCvHqpUGB"><img src="https://img.shields.io/badge/Discord-Community-5865F2?style=flat&logo=discord&logoColor=white" alt="Discord"></a>
   </p>
 </div>
 
-🐈 **nanobot** is an **ultra-lightweight** personal AI assistant inspired by [OpenClaw](https://github.com/openclaw/openclaw) 
+🍌 **banobot** is an **ultra-lightweight** personal AI assistant — a fork of [nanobot](https://github.com/HKUDS/nanobot)
 
 ⚡️ Delivers core agent functionality in just **~4,000** lines of code — **99% smaller** than Clawdbot's 430k+ lines.
 
@@ -20,6 +17,7 @@
 
 ## 📢 News
 
+- **2026-02-19** 🍌 **banobot** forked from nanobot with multi-provider web search support!
 - **2026-02-17** 🎉 Released **v0.1.4** — MCP support, progress streaming, new providers, and multiple channel improvements. Please see [release notes](https://github.com/HKUDS/nanobot/releases/tag/v0.1.4) for details.
 - **2026-02-16** 🦞 nanobot now integrates a [ClawHub](https://clawhub.ai) skill — search and install public agent skills.
 - **2026-02-15** 🔑 nanobot now supports OpenAI Codex provider with OAuth login support.
@@ -43,7 +41,7 @@
 
 </details>
 
-## Key Features of nanobot:
+## Key Features of banobot:
 
 🪶 **Ultra-Lightweight**: Just ~4,000 lines of core agent code — 99% smaller than Clawdbot.
 
@@ -56,7 +54,7 @@
 ## 🏗️ Architecture
 
 <p align="center">
-  <img src="nanobot_arch.png" alt="nanobot architecture" width="800">
+  <img src="banobot_arch.png" alt="nanobot architecture" width="800">
 </p>
 
 ## ✨ Features
@@ -95,13 +93,13 @@ pip install -e .
 **Install with [uv](https://github.com/astral-sh/uv)** (stable, fast)
 
 ```bash
-uv tool install nanobot-ai
+uv tool install banobot-ai
 ```
 
 **Install from PyPI** (stable)
 
 ```bash
-pip install nanobot-ai
+pip install banobot-ai
 ```
 
 ## 🚀 Quick Start
@@ -595,8 +593,8 @@ Config file: `~/.nanobot/config.json`
 | `moonshot` | LLM (Moonshot/Kimi) | [platform.moonshot.cn](https://platform.moonshot.cn) |
 | `zhipu` | LLM (Zhipu GLM) | [open.bigmodel.cn](https://open.bigmodel.cn) |
 | `vllm` | LLM (local, any OpenAI-compatible server) | — |
-| `openai_codex` | LLM (Codex, OAuth) | `nanobot provider login openai-codex` |
-| `github_copilot` | LLM (GitHub Copilot, OAuth) | `nanobot provider login github-copilot` |
+| `openai_codex` | LLM (Codex, OAuth) | `banobot provider login openai-codex` |
+| `github_copilot` | LLM (GitHub Copilot, OAuth) | `banobot provider login github-copilot` |
 
 <details>
 <summary><b>OpenAI Codex (OAuth)</b></summary>
@@ -703,7 +701,7 @@ ProviderSpec(
     name="myprovider",                   # config field name
     keywords=("myprovider", "mymodel"),  # model-name keywords for auto-matching
     env_key="MYPROVIDER_API_KEY",        # env var for LiteLLM
-    display_name="My Provider",          # shown in `nanobot status`
+    display_name="My Provider",          # shown in `banobot status`
     litellm_prefix="myprovider",         # auto-prefix: model → myprovider/model
     skip_prefixes=("myprovider/",),      # don't double-prefix
 )
@@ -717,7 +715,7 @@ class ProvidersConfig(BaseModel):
     myprovider: ProviderConfig = ProviderConfig()
 ```
 
-That's it! Environment variables, model prefixing, config matching, and `nanobot status` display will all work automatically.
+That's it! Environment variables, model prefixing, config matching, and `banobot status` display will all work automatically.
 
 **Common `ProviderSpec` options:**
 
@@ -821,16 +819,16 @@ If no `defaultProvider` is set, uses DuckDuckGo (free). Set `defaultProvider` to
 
 | Command | Description |
 |---------|-------------|
-| `nanobot onboard` | Initialize config & workspace |
-| `nanobot agent -m "..."` | Chat with the agent |
-| `nanobot agent` | Interactive chat mode |
-| `nanobot agent --no-markdown` | Show plain-text replies |
-| `nanobot agent --logs` | Show runtime logs during chat |
-| `nanobot gateway` | Start the gateway |
-| `nanobot status` | Show status |
-| `nanobot provider login openai-codex` | OAuth login for providers |
-| `nanobot channels login` | Link WhatsApp (scan QR) |
-| `nanobot channels status` | Show channel status |
+| `banobot onboard` | Initialize config & workspace |
+| `banobot agent -m "..."` | Chat with the agent |
+| `banobot agent` | Interactive chat mode |
+| `banobot agent --no-markdown` | Show plain-text replies |
+| `banobot agent --logs` | Show runtime logs during chat |
+| `banobot gateway` | Start the gateway |
+| `banobot status` | Show status |
+| `banobot provider login openai-codex` | OAuth login for providers |
+| `banobot channels login` | Link WhatsApp (scan QR) |
+| `banobot channels status` | Show channel status |
 
 Interactive mode exits: `exit`, `quit`, `/exit`, `/quit`, `:q`, or `Ctrl+D`.
 
@@ -973,13 +971,13 @@ The project uses [Ruff](https://docs.astral.sh/ruff/) for both linting and forma
 
 ```bash
 # Check for lint errors
-ruff check nanobot/
+ruff check banobot/
 
 # Auto-fix lint errors
 ruff check --fix nanobot/
 
 # Format code
-ruff format nanobot/
+ruff format banobot/
 ```
 
 Rules configured: `E` (pycodestyle), `F` (Pyflakes), `I` (isort), `N` (naming), `W` (whitespace). Line length: 100 chars.
@@ -1080,7 +1078,7 @@ git checkout -b feature/my-feature
 
 # Make changes, then lint and test
 ruff check --fix nanobot/
-ruff format nanobot/
+ruff format banobot/
 pytest
 
 # Commit and push
@@ -1097,7 +1095,7 @@ Then open a PR against `main`. Use conventional commit prefixes: `feat:`, `fix:`
 
 PRs welcome! The codebase is intentionally small and readable. 🤗
 
-**Roadmap** — Pick an item and [open a PR](https://github.com/HKUDS/nanobot/pulls)!
+**Roadmap** — Pick an item and open a PR!
 
 - [ ] **Multi-modal** — See and hear (images, voice, video)
 - [ ] **Long-term memory** — Never forget important context
@@ -1107,9 +1105,13 @@ PRs welcome! The codebase is intentionally small and readable. 🤗
 
 ### Contributors
 
+**banobot** is a fork of [nanobot](https://github.com/HKUDS/nanobot). We thank the original contributors:
+
 <a href="https://github.com/HKUDS/nanobot/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=HKUDS/nanobot&max=100&columns=12&updated=20260210" alt="Contributors" />
+  <img src="https://contrib.rocks/image?repo=HKUDS/nanobot&max=100&columns=12" alt="nanobot Contributors" />
 </a>
+
+See [CREDITS.md](./CREDITS.md) for full attribution.
 
 
 ## ⭐ Star History
@@ -1119,17 +1121,16 @@ PRs welcome! The codebase is intentionally small and readable. 🤗
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=HKUDS/nanobot&type=Date&theme=dark" />
       <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=HKUDS/nanobot&type=Date" />
-      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=HKUDS/nanobot&type=Date" style="border-radius: 15px; box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);" />
+      <img alt="Star History Chart (original nanobot)" src="https://api.star-history.com/svg?repos=HKUDS/nanobot&type=Date" style="border-radius: 15px; box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);" />
     </picture>
   </a>
 </div>
 
 <p align="center">
-  <em> Thanks for visiting ✨ nanobot!</em><br><br>
-  <img src="https://visitor-badge.laobi.icu/badge?page_id=HKUDS.nanobot&style=for-the-badge&color=00d4ff" alt="Views">
+  <em>Thanks for visiting ✨ banobot!</em>
 </p>
 
 
 <p align="center">
-  <sub>nanobot is for educational, research, and technical exchange purposes only</sub>
+  <sub>banobot is for educational, research, and technical exchange purposes only</sub>
 </p>

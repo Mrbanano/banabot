@@ -17,15 +17,15 @@ Completely redesigned the web search architecture to support multiple search pro
 - **Flexible configuration**: Configure multiple providers and set a default
 
 **New Files:**
-- `nanobot/agent/tools/search_registry.py` - Search provider registry and backends (190 lines)
+- `banobot/agent/tools/search_registry.py` - Search provider registry and backends (190 lines)
 
 **Modified Files:**
 - `pyproject.toml` - Added `ddgs>=9.0.0` dependency
-- `nanobot/config/schema.py` - New `SearchProvidersConfig` and enhanced `WebSearchConfig`
-- `nanobot/agent/tools/web.py` - `WebSearchTool` now uses the provider registry
-- `nanobot/agent/loop.py` - Changed `brave_api_key` → `web_search_config`
-- `nanobot/agent/subagent.py` - Changed `brave_api_key` → `web_search_config`
-- `nanobot/cli/commands.py` - Updated to pass `web_search_config`
+- `banobot/config/schema.py` - New `SearchProvidersConfig` and enhanced `WebSearchConfig`
+- `banobot/agent/tools/web.py` - `WebSearchTool` now uses the provider registry
+- `banobot/agent/loop.py` - Changed `brave_api_key` → `web_search_config`
+- `banobot/agent/subagent.py` - Changed `brave_api_key` → `web_search_config`
+- `banobot/cli/commands.py` - Updated to pass `web_search_config`
 - `README.md` - New "Web Search" section with provider documentation
 - `workspace/TOOLS.md` - Updated tool documentation
 

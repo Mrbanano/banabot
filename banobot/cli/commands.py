@@ -1,4 +1,4 @@
-"""CLI commands for nanobot."""
+"""CLI commands for banobot."""
 
 import asyncio
 import os
@@ -22,8 +22,8 @@ from banobot import __version__, __logo__
 from banobot.config.schema import Config
 
 app = typer.Typer(
-    name="nanobot",
-    help=f"{__logo__} nanobot - Personal AI Assistant",
+    name="banobot",
+    help=f"{__logo__} banobot - Personal AI Assistant",
     no_args_is_help=True,
 )
 
@@ -102,7 +102,7 @@ def _print_agent_response(response: str, render_markdown: bool) -> None:
     content = response or ""
     body = Markdown(content) if render_markdown else Text(content)
     console.print()
-    console.print(f"[cyan]{__logo__} nanobot[/cyan]")
+    console.print(f"[cyan]{__logo__} banobot[/cyan]")
     console.print(body)
     console.print()
 
@@ -134,7 +134,7 @@ async def _read_interactive_input_async() -> str:
 
 def version_callback(value: bool):
     if value:
-        console.print(f"{__logo__} nanobot v{__version__}")
+        console.print(f"{__logo__} banobot v{__version__}")
         raise typer.Exit()
 
 
@@ -144,7 +144,7 @@ def main(
         None, "--version", "-v", callback=version_callback, is_eager=True
     ),
 ):
-    """nanobot - Personal AI Assistant."""
+    """banobot - Personal AI Assistant."""
     pass
 
 
@@ -155,7 +155,7 @@ def main(
 
 @app.command()
 def onboard():
-    """Initialize nanobot configuration and workspace."""
+    """Initialize banobot configuration and workspace."""
     from banobot.config.loader import get_config_path, load_config, save_config
     from banobot.config.schema import Config
     from banobot.utils.helpers import get_workspace_path
@@ -188,7 +188,7 @@ def onboard():
     # Create default bootstrap files
     _create_workspace_templates(workspace)
     
-    console.print(f"\n{__logo__} nanobot is ready!\n")
+    console.print(f"\n{__logo__} banobot is ready!\n")
 
     # 🍌 Launch Banabot interactive wizard
     if typer.confirm("🍌 ¿Configurar Banabot ahora? / Configure Banabot now?", default=True):
@@ -197,8 +197,8 @@ def onboard():
         config = config_wizard(config)
         save_config(config)
     else:
-        console.print("  Configura después con: [cyan]nanobot banabot config[/cyan]")
-        console.print("  Configure later with: [cyan]nanobot banabot config[/cyan]")
+        console.print("  Configura después con: [cyan]banobot config[/cyan]")
+        console.print("  Configure later with: [cyan]banobot config[/cyan]")
 
 
 
@@ -219,7 +219,7 @@ You are a helpful AI assistant. Be concise, accurate, and friendly.
 """,
         "SOUL.md": """# Soul
 
-I am nanobot, a lightweight AI assistant.
+I am banobot, a lightweight AI assistant.
 
 ## Personality
 
@@ -332,7 +332,7 @@ def gateway(
     port: int = typer.Option(18790, "--port", "-p", help="Gateway port"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
 ):
-    """Start the nanobot gateway."""
+    """Start the banobot gateway."""
     from banobot.config.loader import load_config, get_data_dir
     from banobot.bus.queue import MessageBus
     from banobot.agent.loop import AgentLoop
@@ -346,7 +346,7 @@ def gateway(
         import logging
         logging.basicConfig(level=logging.DEBUG)
     
-    console.print(f"{__logo__} Starting nanobot gateway on port {port}...")
+    console.print(f"{__logo__} Starting banobot gateway on port {port}...")
     
     config = load_config()
     bus = MessageBus()
@@ -452,7 +452,7 @@ def agent(
     message: str = typer.Option(None, "--message", "-m", help="Message to send to the agent"),
     session_id: str = typer.Option("cli:direct", "--session", "-s", help="Session ID"),
     markdown: bool = typer.Option(True, "--markdown/--no-markdown", help="Render assistant output as Markdown"),
-    logs: bool = typer.Option(False, "--logs/--no-logs", help="Show nanobot runtime logs during chat"),
+    logs: bool = typer.Option(False, "--logs/--no-logs", help="Show banobot runtime logs during chat"),
 ):
     """Interact with the agent directly."""
     from banobot.config.loader import load_config, get_data_dir
@@ -471,9 +471,9 @@ def agent(
     cron = CronService(cron_store_path)
 
     if logs:
-        logger.enable("nanobot")
+        logger.enable("banobot")
     else:
-        logger.disable("nanobot")
+        logger.disable("banobot")
     
     agent_loop = AgentLoop(
         bus=bus,
@@ -497,7 +497,7 @@ def agent(
             from contextlib import nullcontext
             return nullcontext()
         # Animated spinner is safe to use with prompt_toolkit input handling
-        return console.status("[dim]nanobot is thinking...[/dim]", spinner="dots")
+        return console.status("[dim]banobot is thinking...[/dim]", spinner="dots")
 
     async def _cli_progress(content: str) -> None:
         console.print(f"  [dim]↳ {content}[/dim]")
@@ -648,7 +648,7 @@ def _get_bridge_dir() -> Path:
         raise typer.Exit(1)
     
     # Find source bridge: first check package data, then source dir
-    pkg_bridge = Path(__file__).parent.parent / "bridge"  # nanobot/bridge (installed)
+    pkg_bridge = Path(__file__).parent.parent / "bridge"  # banobot/bridge (installed)
     src_bridge = Path(__file__).parent.parent.parent / "bridge"  # repo root/bridge (dev)
     
     source = None
@@ -659,7 +659,7 @@ def _get_bridge_dir() -> Path:
     
     if not source:
         console.print("[red]Bridge source not found.[/red]")
-        console.print("Try reinstalling: pip install --force-reinstall nanobot")
+        console.print("Try reinstalling: pip install --force-reinstall banobot-ai")
         raise typer.Exit(1)
     
     console.print(f"{__logo__} Setting up bridge...")
@@ -887,14 +887,14 @@ def cron_run(
 
 @app.command()
 def status():
-    """Show nanobot status."""
+    """Show banobot status."""
     from banobot.config.loader import load_config, get_config_path
 
     config_path = get_config_path()
     config = load_config()
     workspace = config.workspace_path
 
-    console.print(f"{__logo__} nanobot Status\n")
+    console.print(f"{__logo__} banobot Status\n")
 
     console.print(f"Config: {config_path} {'[green]✓[/green]' if config_path.exists() else '[red]✗[/red]'}")
     console.print(f"Workspace: {workspace} {'[green]✓[/green]' if workspace.exists() else '[red]✗[/red]'}")
