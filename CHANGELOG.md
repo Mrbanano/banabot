@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to banobot will be documented in this file.
+All notable changes to banabot will be documented in this file.
 
 ## [0.2.0] - 2026-02-19
 
@@ -12,14 +12,14 @@ Enhanced CLI with better branding and user experience.
 
 **Changes:**
 - Changed logo from 🐈 to 🍌
-- Updated all CLI commands and descriptions to banobot branding
+- Updated all CLI commands and descriptions to banabot branding
 - Updated all user-facing messages and prompts
 - Improved command help text
 
 **Modified Files:**
-- `banobot/__init__.py` - New logo 🍌
-- `banobot/cli/commands.py` - All CLI text updated
-- `banobot/agent/context.py` - Agent identity updated
+- `banabot/__init__.py` - New logo 🍌
+- `banabot/cli/commands.py` - All CLI text updated
+- `banabot/agent/context.py` - Agent identity updated
 - All channel files - Discord, Telegram, Email branding
 
 ---
@@ -39,15 +39,15 @@ Completely redesigned the web search architecture to support multiple search pro
 - **Flexible configuration**: Configure multiple providers and set a default
 
 **New Files:**
-- `banobot/agent/tools/search_registry.py` - Search provider registry and backends (190 lines)
+- `banabot/agent/tools/search_registry.py` - Search provider registry and backends (190 lines)
 
 **Modified Files:**
 - `pyproject.toml` - Added `ddgs>=9.0.0` dependency
-- `banobot/config/schema.py` - New `SearchProvidersConfig` and enhanced `WebSearchConfig`
-- `banobot/agent/tools/web.py` - `WebSearchTool` now uses the provider registry
-- `banobot/agent/loop.py` - Changed `brave_api_key` → `web_search_config`
-- `banobot/agent/subagent.py` - Changed `brave_api_key` → `web_search_config`
-- `banobot/cli/commands.py` - Updated to pass `web_search_config`
+- `banabot/config/schema.py` - New `SearchProvidersConfig` and enhanced `WebSearchConfig`
+- `banabot/agent/tools/web.py` - `WebSearchTool` now uses the provider registry
+- `banabot/agent/loop.py` - Changed `brave_api_key` → `web_search_config`
+- `banabot/agent/subagent.py` - Changed `brave_api_key` → `web_search_config`
+- `banabot/cli/commands.py` - Updated to pass `web_search_config`
 - `README.md` - New "Web Search" section with provider documentation
 - `workspace/TOOLS.md` - Updated tool documentation
 
@@ -86,16 +86,16 @@ Completely redesigned the web search architecture to support multiple search pro
 
 ### Added
 
-#### Birth of banobot 🍌
+#### Birth of banabot 🍌
 
-**banobot** is born as a fork of [nanobot](https://github.com/HKUDS/nanobot).
+**banabot** is born as a fork of [nanobot](https://github.com/HKUDS/nanobot).
 
 **Rebranding Changes:**
-- Package renamed: `nanobot-ai` → `banobot-ai`
-- CLI command renamed: `nanobot` → `banobot`
-- Config path changed: `~/.nanobot` → `~/.banobot`
+- Package renamed: `nanobot-ai` → `banabot-ai`
+- CLI command renamed: `nanobot` → `banabot`
+- Config path changed: `~/.nanobot` → `~/.banabot`
 - Environment variables: `NANOBOT_*` → `BANOBOT_*`
-- Directory renamed: `nanobot/` → `banobot/`
+- Directory renamed: `nanobot/` → `banabot/`
 
 **New Files:**
 - `CREDITS.md` - Attribution to original nanobot contributors
@@ -103,7 +103,7 @@ Completely redesigned the web search architecture to support multiple search pro
 - `CHANGELOG.md` - This file
 
 **Modified Files:**
-- `LICENSE` - Added banobot copyright while preserving original
+- `LICENSE` - Added banabot copyright while preserving original
 - `pyproject.toml` - Package name and configuration
 - `README.md` - Updated branding with fork attribution
 - `SECURITY.md` - Updated references

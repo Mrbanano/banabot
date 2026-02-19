@@ -1,7 +1,7 @@
 from typing import Any
 
-from banobot.agent.tools.base import Tool
-from banobot.agent.tools.registry import ToolRegistry
+from banabot.agent.tools.base import Tool
+from banabot.agent.tools.registry import ToolRegistry
 
 
 class SampleTool(Tool):

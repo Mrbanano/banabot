@@ -3,11 +3,11 @@ x-common-config: &common-config
     context: .
     dockerfile: Dockerfile
   volumes:
-    - ~/.banobot:/root/.banobot
+    - ~/.banabot:/root/.banabot
 
 services:
-  banobot-gateway:
-    container_name: banobot-gateway
+  banabot-gateway:
+    container_name: banabot-gateway
     <<: *common-config
     command: ["gateway"]
     restart: unless-stopped
@@ -22,7 +22,7 @@ services:
           cpus: '0.25'
           memory: 256M
   
-  banobot-cli:
+  banabot-cli:
     <<: *common-config
     profiles:
       - cli

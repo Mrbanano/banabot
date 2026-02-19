@@ -2,7 +2,7 @@
 
 import pytest
 from pathlib import Path
-from banobot.session.manager import Session, SessionManager
+from banabot.session.manager import Session, SessionManager
 
 # Test constants
 MEMORY_WINDOW = 50

@@ -46,4 +46,4 @@ Information about the user to help personalize interactions.
 
 ---
 
-*Edit this file to customize banobot's behavior for your needs.*
+*Edit this file to customize banabot's behavior for your needs.*
