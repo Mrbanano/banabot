@@ -10,7 +10,7 @@ from banobot.agent.tools.registry import ToolRegistry
 
 
 class MCPToolWrapper(Tool):
-    """Wraps a single MCP server tool as a nanobot Tool."""
+    """Wraps a single MCP server tool as a banobot Tool."""
 
     def __init__(self, session, server_name: str, tool_def):
         self._session = session
