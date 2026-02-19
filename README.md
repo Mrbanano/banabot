@@ -17,27 +17,17 @@
 
 ## 📢 News
 
-- **2026-02-19** 🍌 **banobot** forked from nanobot with multi-provider web search support!
-- **2026-02-17** 🎉 Released **v0.1.4** — MCP support, progress streaming, new providers, and multiple channel improvements. Please see [release notes](https://github.com/HKUDS/nanobot/releases/tag/v0.1.4) for details.
-- **2026-02-16** 🦞 nanobot now integrates a [ClawHub](https://clawhub.ai) skill — search and install public agent skills.
-- **2026-02-15** 🔑 nanobot now supports OpenAI Codex provider with OAuth login support.
-- **2026-02-14** 🔌 nanobot now supports MCP! See [MCP section](#mcp-model-context-protocol) for details.
-- **2026-02-13** 🎉 Released **v0.1.3.post7** — includes security hardening and multiple improvements. **Please upgrade to the latest version to address security issues**. See [release notes](https://github.com/HKUDS/nanobot/releases/tag/v0.1.3.post7) for more details.
-- **2026-02-12** 🧠 Redesigned memory system — Less code, more reliable. Join the [discussion](https://github.com/HKUDS/nanobot/discussions/566) about it!
-- **2026-02-11** ✨ Enhanced CLI experience and added MiniMax support!
-- **2026-02-10** 🎉 Released **v0.1.3.post6** with improvements! Check the updates [notes](https://github.com/HKUDS/nanobot/releases/tag/v0.1.3.post6) and our [roadmap](https://github.com/HKUDS/nanobot/discussions/431).
-- **2026-02-09** 💬 Added Slack, Email, and QQ support — nanobot now supports multiple chat platforms!
-- **2026-02-08** 🔧 Refactored Providers—adding a new LLM provider now takes just 2 simple steps! Check [here](#providers).
+- **2026-02-19** 🍌 **banobot v0.2.0** released! Fork of nanobot with multi-provider web search and complete rebranding.
+- **2026-02-19** 🔍 Multi-provider web search: DuckDuckGo (free, no API key), Brave, Tavily, Serper, SearXNG.
+- **2026-02-19** 🎨 Complete rebranding: new logo 🍌, CLI command `banobot`, config path `~/.banobot`.
 
 <details>
-<summary>Earlier news</summary>
+<summary>Historical news (from nanobot)</summary>
 
-- **2026-02-07** 🚀 Released **v0.1.3.post5** with Qwen support & several key improvements! Check [here](https://github.com/HKUDS/nanobot/releases/tag/v0.1.3.post5) for details.
-- **2026-02-06** ✨ Added Moonshot/Kimi provider, Discord integration, and enhanced security hardening!
-- **2026-02-05** ✨ Added Feishu channel, DeepSeek provider, and enhanced scheduled tasks support!
-- **2026-02-04** 🚀 Released **v0.1.3.post4** with multi-provider & Docker support! Check [here](https://github.com/HKUDS/nanobot/releases/tag/v0.1.3.post4) for details.
-- **2026-02-03** ⚡ Integrated vLLM for local LLM support and improved natural language task scheduling!
-- **2026-02-02** 🎉 nanobot officially launched! Welcome to try 🐈 nanobot!
+- **2026-02-17** 🎉 Released **v0.1.4** — MCP support, progress streaming, new providers. See [nanobot releases](https://github.com/HKUDS/nanobot/releases).
+- **2026-02-14** 🔌 MCP support added! See [MCP section](#mcp-model-context-protocol) for details.
+- **2026-02-09** 💬 Added Slack, Email, and QQ support.
+- **2026-02-02** 🎉 nanobot officially launched!
 
 </details>
 
@@ -85,8 +75,8 @@
 **Install from source** (latest features, recommended for development)
 
 ```bash
-git clone https://github.com/HKUDS/nanobot.git
-cd nanobot
+git clone https://github.com/Mrbanano/banobot.git
+cd banobot
 pip install -e .
 ```
 
@@ -105,16 +95,16 @@ pip install banobot-ai
 ## 🚀 Quick Start
 
 > [!TIP]
-> Set your API key in `~/.nanobot/config.json`.
+> Set your API key in `~/.banobot/config.json`.
 > Get API keys: [OpenRouter](https://openrouter.ai/keys) (Global) · Web search works out-of-the-box with DuckDuckGo (free)
 
 **1. Initialize**
 
 ```bash
-nanobot onboard
+banobot onboard
 ```
 
-**2. Configure** (`~/.nanobot/config.json`)
+**2. Configure** (`~/.banobot/config.json`)
 
 Add or merge these **two parts** into your config (other options have defaults).
 
@@ -143,14 +133,14 @@ Add or merge these **two parts** into your config (other options have defaults).
 **3. Chat**
 
 ```bash
-nanobot agent
+banobot agent
 ```
 
 That's it! You have a working AI assistant in 2 minutes.
 
 ## 💬 Chat Apps
 
-Connect nanobot to your favorite chat platform.
+Connect banobot to your favorite chat platform.
 
 | Channel | What you need |
 |---------|---------------|
@@ -193,7 +183,7 @@ Connect nanobot to your favorite chat platform.
 **3. Run**
 
 ```bash
-nanobot gateway
+banobot gateway
 ```
 
 </details>
@@ -203,30 +193,30 @@ nanobot gateway
 
 Uses **Socket.IO WebSocket** by default, with HTTP polling fallback.
 
-**1. Ask nanobot to set up Mochat for you**
+**1. Ask banobot to set up Mochat for you**
 
-Simply send this message to nanobot (replace `xxx@xxx` with your real email):
+Simply send this message to banobot (replace `xxx@xxx` with your real email):
 
 ```
 Read https://raw.githubusercontent.com/HKUDS/MoChat/refs/heads/main/skills/nanobot/skill.md and register on MoChat. My Email account is xxx@xxx Bind me as your owner and DM me on MoChat.
 ```
 
-nanobot will automatically register, configure `~/.nanobot/config.json`, and connect to Mochat.
+banobot will automatically register, configure `~/.banobot/config.json`, and connect to Mochat.
 
 **2. Restart gateway**
 
 ```bash
-nanobot gateway
+banobot gateway
 ```
 
-That's it — nanobot handles the rest!
+That's it — banobot handles the rest!
 
 <br>
 
 <details>
 <summary>Manual configuration (advanced)</summary>
 
-If you prefer to configure manually, add the following to `~/.nanobot/config.json`:
+If you prefer to configure manually, add the following to `~/.banobot/config.json`:
 
 > Keep `claw_token` private. It should only be sent in `X-Claw-Token` header to your Mochat API endpoint.
 
@@ -294,7 +284,7 @@ If you prefer to configure manually, add the following to `~/.nanobot/config.jso
 **6. Run**
 
 ```bash
-nanobot gateway
+banobot gateway
 ```
 
 </details>
@@ -307,7 +297,7 @@ Requires **Node.js ≥18**.
 **1. Link device**
 
 ```bash
-nanobot channels login
+banobot channels login
 # Scan QR with WhatsApp → Settings → Linked Devices
 ```
 
@@ -328,10 +318,10 @@ nanobot channels login
 
 ```bash
 # Terminal 1
-nanobot channels login
+banobot channels login
 
 # Terminal 2
-nanobot gateway
+banobot gateway
 ```
 
 </details>
@@ -346,7 +336,7 @@ Uses **WebSocket** long connection — no public IP required.
 - Create a new app → Enable **Bot** capability
 - **Permissions**: Add `im:message` (send messages)
 - **Events**: Add `im.message.receive_v1` (receive messages)
-  - Select **Long Connection** mode (requires running nanobot first to establish connection)
+  - Select **Long Connection** mode (requires running banobot first to establish connection)
 - Get **App ID** and **App Secret** from "Credentials & Basic Info"
 - Publish the app
 
@@ -373,7 +363,7 @@ Uses **WebSocket** long connection — no public IP required.
 **3. Run**
 
 ```bash
-nanobot gateway
+banobot gateway
 ```
 
 > [!TIP]
@@ -398,7 +388,7 @@ Uses **botpy SDK** with WebSocket — no public IP required. Currently supports 
 
 **3. Configure**
 
-> - `allowFrom`: Leave empty for public access, or add user openids to restrict. You can find openids in the nanobot logs when a user messages the bot.
+> - `allowFrom`: Leave empty for public access, or add user openids to restrict. You can find openids in the banobot logs when a user messages the bot.
 > - For production: submit a review in the bot console and publish. See [QQ Bot Docs](https://bot.q.qq.com/wiki/) for the full publishing flow.
 
 ```json
@@ -417,7 +407,7 @@ Uses **botpy SDK** with WebSocket — no public IP required. Currently supports 
 **4. Run**
 
 ```bash
-nanobot gateway
+banobot gateway
 ```
 
 Now send a message to the bot from QQ — it should respond!
@@ -458,7 +448,7 @@ Uses **Stream Mode** — no public IP required.
 **3. Run**
 
 ```bash
-nanobot gateway
+banobot gateway
 ```
 
 </details>
@@ -479,7 +469,7 @@ Uses **Socket Mode** — no public URL required.
 - **App Home**: Scroll to **Show Tabs** → Enable **Messages Tab** → Check **"Allow users to send Slash commands and messages from the messages tab"**
 - **Install App**: Click **Install to Workspace** → Authorize → copy the **Bot Token** (`xoxb-...`)
 
-**3. Configure nanobot**
+**3. Configure banobot**
 
 ```json
 {
@@ -497,7 +487,7 @@ Uses **Socket Mode** — no public URL required.
 **4. Run**
 
 ```bash
-nanobot gateway
+banobot gateway
 ```
 
 DM the bot directly or @mention it in a channel — it should respond!
@@ -511,7 +501,7 @@ DM the bot directly or @mention it in a channel — it should respond!
 <details>
 <summary><b>Email</b></summary>
 
-Give nanobot its own email account. It polls **IMAP** for incoming mail and replies via **SMTP** — like a personal email assistant.
+Give banobot its own email account. It polls **IMAP** for incoming mail and replies via **SMTP** — like a personal email assistant.
 
 **1. Get credentials (Gmail example)**
 - Create a dedicated Gmail account for your bot (e.g. `my-nanobot@gmail.com`)
@@ -550,25 +540,25 @@ Give nanobot its own email account. It polls **IMAP** for incoming mail and repl
 **3. Run**
 
 ```bash
-nanobot gateway
+banobot gateway
 ```
 
 </details>
 
 ## 🌐 Agent Social Network
 
-🐈 nanobot is capable of linking to the agent social network (agent community). **Just send one message and your nanobot joins automatically!**
+🍌 banobot is capable of linking to the agent social network (agent community). **Just send one message and your banobot joins automatically!**
 
 | Platform | How to Join (send this message to your bot) |
 |----------|-------------|
 | [**Moltbook**](https://www.moltbook.com/) | `Read https://moltbook.com/skill.md and follow the instructions to join Moltbook` |
 | [**ClawdChat**](https://clawdchat.ai/) | `Read https://clawdchat.ai/skill.md and follow the instructions to join ClawdChat` |
 
-Simply send the command above to your nanobot (via CLI or any chat channel), and it will handle the rest.
+Simply send the command above to your banobot (via CLI or any chat channel), and it will handle the rest.
 
 ## ⚙️ Configuration
 
-Config file: `~/.nanobot/config.json`
+Config file: `~/.banobot/config.json`
 
 ### Providers
 
@@ -603,10 +593,10 @@ Codex uses OAuth instead of API keys. Requires a ChatGPT Plus or Pro account.
 
 **1. Login:**
 ```bash
-nanobot provider login openai-codex
+banobot provider login openai-codex
 ```
 
-**2. Set model** (merge into `~/.nanobot/config.json`):
+**2. Set model** (merge into `~/.banobot/config.json`):
 ```json
 {
   "agents": {
@@ -619,7 +609,7 @@ nanobot provider login openai-codex
 
 **3. Chat:**
 ```bash
-nanobot agent -m "Hello!"
+banobot agent -m "Hello!"
 ```
 
 > Docker users: use `docker run -it` for interactive OAuth login.
@@ -661,7 +651,7 @@ Run your own model with vLLM or any OpenAI-compatible server, then add to config
 vllm serve meta-llama/Llama-3.1-8B-Instruct --port 8000
 ```
 
-**2. Add to config** (partial — merge into `~/.nanobot/config.json`):
+**2. Add to config** (partial — merge into `~/.banobot/config.json`):
 
 *Provider (key can be any non-empty string for local):*
 ```json
@@ -691,10 +681,10 @@ vllm serve meta-llama/Llama-3.1-8B-Instruct --port 8000
 <details>
 <summary><b>Adding a New Provider (Developer Guide)</b></summary>
 
-nanobot uses a **Provider Registry** (`nanobot/providers/registry.py`) as the single source of truth.
+banobot uses a **Provider Registry** (`banobot/providers/registry.py`) as the single source of truth.
 Adding a new provider only takes **2 steps** — no if-elif chains to touch.
 
-**Step 1.** Add a `ProviderSpec` entry to `PROVIDERS` in `nanobot/providers/registry.py`:
+**Step 1.** Add a `ProviderSpec` entry to `PROVIDERS` in `banobot/providers/registry.py`:
 
 ```python
 ProviderSpec(
@@ -707,7 +697,7 @@ ProviderSpec(
 )
 ```
 
-**Step 2.** Add a field to `ProvidersConfig` in `nanobot/config/schema.py`:
+**Step 2.** Add a field to `ProvidersConfig` in `banobot/config/schema.py`:
 
 ```python
 class ProvidersConfig(BaseModel):
@@ -738,7 +728,7 @@ That's it! Environment variables, model prefixing, config matching, and `banobot
 > [!TIP]
 > The config format is compatible with Claude Desktop / Cursor. You can copy MCP server configs directly from any MCP server's README.
 
-nanobot supports [MCP](https://modelcontextprotocol.io/) — connect external tool servers and use them as native agent tools.
+banobot supports [MCP](https://modelcontextprotocol.io/) — connect external tool servers and use them as native agent tools.
 
 Add MCP servers to your `config.json`:
 
@@ -780,7 +770,7 @@ MCP tools are automatically discovered and registered on startup. The LLM can us
 
 ### Web Search
 
-nanobot supports multiple search providers — **works out-of-the-box with DuckDuckGo (free, no API key required)**.
+banobot supports multiple search providers — **works out-of-the-box with DuckDuckGo (free, no API key required)**.
 
 | Provider | API Key | Get Key |
 |----------|---------|---------|
@@ -790,7 +780,7 @@ nanobot supports multiple search providers — **works out-of-the-box with DuckD
 | `serper` | Yes | [Serper](https://serper.dev/) |
 | `searxng` | No (self-hosted) | [SearXNG](https://searxng.org/) |
 
-**Configuration** (`~/.nanobot/config.json`):
+**Configuration** (`~/.banobot/config.json`):
 
 ```json
 {
@@ -837,14 +827,14 @@ Interactive mode exits: `exit`, `quit`, `/exit`, `/quit`, `:q`, or `Ctrl+D`.
 
 ```bash
 # Add a job
-nanobot cron add --name "daily" --message "Good morning!" --cron "0 9 * * *"
-nanobot cron add --name "hourly" --message "Check status" --every 3600
+banobot cron add --name "daily" --message "Good morning!" --cron "0 9 * * *"
+banobot cron add --name "hourly" --message "Check status" --every 3600
 
 # List jobs
-nanobot cron list
+banobot cron list
 
 # Remove a job
-nanobot cron remove <job_id>
+banobot cron remove <job_id>
 ```
 
 </details>
@@ -852,19 +842,19 @@ nanobot cron remove <job_id>
 ## 🐳 Docker
 
 > [!TIP]
-> The `-v ~/.nanobot:/root/.nanobot` flag mounts your local config directory into the container, so your config and workspace persist across container restarts.
+> The `-v ~/.banobot:/root/.banobot` flag mounts your local config directory into the container, so your config and workspace persist across container restarts.
 
 ### Docker Compose
 
 ```bash
-docker compose run --rm nanobot-cli onboard   # first-time setup
-vim ~/.nanobot/config.json                     # add API keys
-docker compose up -d nanobot-gateway           # start gateway
+docker compose run --rm banobot-cli onboard   # first-time setup
+vim ~/.banobot/config.json                     # add API keys
+docker compose up -d banobot-gateway           # start gateway
 ```
 
 ```bash
-docker compose run --rm nanobot-cli agent -m "Hello!"   # run CLI
-docker compose logs -f nanobot-gateway                   # view logs
+docker compose run --rm banobot-cli agent -m "Hello!"   # run CLI
+docker compose logs -f banobot-gateway                   # view logs
 docker compose down                                      # stop
 ```
 
@@ -872,26 +862,26 @@ docker compose down                                      # stop
 
 ```bash
 # Build the image
-docker build -t nanobot .
+docker build -t banobot .
 
 # Initialize config (first time only)
-docker run -v ~/.nanobot:/root/.nanobot --rm nanobot onboard
+docker run -v ~/.banobot:/root/.banobot --rm banobot onboard
 
 # Edit config on host to add API keys
-vim ~/.nanobot/config.json
+vim ~/.banobot/config.json
 
 # Run gateway (connects to enabled channels, e.g. Telegram/Discord/Mochat)
-docker run -v ~/.nanobot:/root/.nanobot -p 18790:18790 nanobot gateway
+docker run -v ~/.banobot:/root/.banobot -p 18790:18790 banobot gateway
 
 # Or run a single command
-docker run -v ~/.nanobot:/root/.nanobot --rm nanobot agent -m "Hello!"
-docker run -v ~/.nanobot:/root/.nanobot --rm nanobot status
+docker run -v ~/.banobot:/root/.banobot --rm banobot agent -m "Hello!"
+docker run -v ~/.banobot:/root/.banobot --rm banobot status
 ```
 
 ## 📁 Project Structure
 
 ```
-nanobot/
+banobot/
 ├── agent/          # 🧠 Core agent logic
 │   ├── loop.py     #    Agent loop (LLM ↔ tool execution)
 │   ├── context.py  #    Prompt builder
@@ -923,7 +913,7 @@ nanobot/
 ```bash
 # 1. Clone the repo
 git clone https://github.com/Mrbanano/banobot.git
-cd nanobot
+cd banobot
 
 # 2. Create and activate a virtual environment
 python -m venv .venv
@@ -933,9 +923,9 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 
 # 4. Initialize config & workspace
-nanobot onboard
+banobot onboard
 
-# 5. Add an API key to ~/.nanobot/config.json (e.g. OpenRouter)
+# 5. Add an API key to ~/.banobot/config.json (e.g. OpenRouter)
 # {
 #   "providers": {
 #     "openrouter": { "apiKey": "sk-or-v1-xxx" }
@@ -943,8 +933,8 @@ nanobot onboard
 # }
 
 # 6. Verify everything works
-nanobot status
-nanobot agent -m "Hello!"
+banobot status
+banobot agent -m "Hello!"
 ```
 
 ### Running Tests
@@ -974,7 +964,7 @@ The project uses [Ruff](https://docs.astral.sh/ruff/) for both linting and forma
 ruff check banobot/
 
 # Auto-fix lint errors
-ruff check --fix nanobot/
+ruff check --fix banobot/
 
 # Format code
 ruff format banobot/
@@ -986,10 +976,10 @@ Rules configured: `E` (pycodestyle), `F` (Pyflakes), `I` (isort), `N` (naming), 
 
 ```bash
 # Run agent with runtime logs visible
-nanobot agent -m "test" --logs
+banobot agent -m "test" --logs
 
 # Run gateway in verbose mode
-nanobot gateway --verbose
+banobot gateway --verbose
 ```
 
 ### Building the WhatsApp Bridge (optional)
@@ -1007,7 +997,7 @@ npm run build
 <details>
 <summary><b>Adding a New Tool</b></summary>
 
-1. Create `nanobot/agent/tools/mytool.py` extending the `Tool` base class
+1. Create `banobot/agent/tools/mytool.py` extending the `Tool` base class
 2. Implement `name`, `description`, `parameters` (JSON schema), and `execute(**kwargs)`
 3. Register it in the `AgentLoop` tool setup
 
@@ -1034,10 +1024,10 @@ class MyTool(Tool):
 <details>
 <summary><b>Adding a New Channel</b></summary>
 
-1. Create `nanobot/channels/myservice.py` extending `Channel`
+1. Create `banobot/channels/myservice.py` extending `Channel`
 2. Implement `start()`, `stop()`, and message sending logic
 3. Subscribe to the inbound message bus
-4. Add a config class to `nanobot/config/schema.py`
+4. Add a config class to `banobot/config/schema.py`
 5. Register in `ChannelManager.start_all()`
 
 </details>
@@ -1047,11 +1037,11 @@ class MyTool(Tool):
 
 Skills are Markdown files that give the agent domain-specific instructions:
 
-1. Create `~/.nanobot/workspace/skills/myskill/SKILL.md`
+1. Create `~/.banobot/workspace/skills/myskill/SKILL.md`
 2. Write instructions, examples, and notes in Markdown
 3. The agent will auto-discover and use it
 
-See `nanobot/skills/README.md` for the full skill format.
+See `banobot/skills/README.md` for the full skill format.
 
 </details>
 
@@ -1059,16 +1049,16 @@ See `nanobot/skills/README.md` for the full skill format.
 
 | Component | Path | Role |
 |-----------|------|------|
-| **Agent Loop** | `nanobot/agent/loop.py` | Core LLM ↔ tool execution cycle |
-| **Context Builder** | `nanobot/agent/context.py` | Assembles prompts from workspace files |
-| **Memory** | `nanobot/agent/memory.py` | Two-layer: `MEMORY.md` (facts) + `HISTORY.md` (events) |
-| **Message Bus** | `nanobot/bus/` | Async inbound/outbound queues decoupling channels from agent |
-| **Provider Registry** | `nanobot/providers/registry.py` | Single registry for 18+ LLM providers |
-| **Session Manager** | `nanobot/session/manager.py` | JSONL-based per-channel conversation storage |
-| **Tool Registry** | `nanobot/agent/tools/registry.py` | Manages built-in + MCP tools |
-| **Channel Manager** | `nanobot/channels/manager.py` | Starts/stops all enabled channel integrations |
-| **Cron Service** | `nanobot/cron/service.py` | Scheduled task execution (cron, interval, one-time) |
-| **Config Schema** | `nanobot/config/schema.py` | Pydantic models for all config sections |
+| **Agent Loop** | `banobot/agent/loop.py` | Core LLM ↔ tool execution cycle |
+| **Context Builder** | `banobot/agent/context.py` | Assembles prompts from workspace files |
+| **Memory** | `banobot/agent/memory.py` | Two-layer: `MEMORY.md` (facts) + `HISTORY.md` (events) |
+| **Message Bus** | `banobot/bus/` | Async inbound/outbound queues decoupling channels from agent |
+| **Provider Registry** | `banobot/providers/registry.py` | Single registry for 18+ LLM providers |
+| **Session Manager** | `banobot/session/manager.py` | JSONL-based per-channel conversation storage |
+| **Tool Registry** | `banobot/agent/tools/registry.py` | Manages built-in + MCP tools |
+| **Channel Manager** | `banobot/channels/manager.py` | Starts/stops all enabled channel integrations |
+| **Cron Service** | `banobot/cron/service.py` | Scheduled task execution (cron, interval, one-time) |
+| **Config Schema** | `banobot/config/schema.py` | Pydantic models for all config sections |
 
 ### PR Workflow
 
@@ -1077,7 +1067,7 @@ See `nanobot/skills/README.md` for the full skill format.
 git checkout -b feature/my-feature
 
 # Make changes, then lint and test
-ruff check --fix nanobot/
+ruff check --fix banobot/
 ruff format banobot/
 pytest
 
