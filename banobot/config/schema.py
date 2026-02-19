@@ -319,7 +319,7 @@ class ToolsConfig(Base):
 
 
 class Config(BaseSettings):
-    """Root configuration for nanobot."""
+    """Root configuration for banobot."""
 
     language: str = "es"  # Preferred language for wizard and bot context (es, en, ...)
     agents: AgentsConfig = Field(default_factory=AgentsConfig)
