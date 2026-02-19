@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/alvarocastillo/dev/bananobot/banobot log --oneline)",
+      "Bash(python:*)",
+      "Bash(/Users/alvarocastillo/dev/bananobot/banobot/.venv/bin/python:*)",
+      "Bash(/Users/alvarocastillo/dev/bananobot/banobot/.venv/bin/nanobot banabot:*)",
+      "Bash(/Users/alvarocastillo/dev/bananobot/banobot/.venv/bin/pip:*)"
+    ]
+  }
+}

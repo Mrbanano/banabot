@@ -875,6 +875,187 @@ nanobot/
 └── cli/            # 🖥️ Commands
 ```
 
+## 🛠️ Development Guide
+
+### Prerequisites
+
+- **Python 3.11+**
+- **Node.js 20+** (only needed for WhatsApp bridge)
+- **Git**
+
+### Setup
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/Mrbanano/banobot.git
+cd nanobot
+
+# 2. Create and activate a virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# 3. Install in editable mode with dev dependencies
+pip install -e ".[dev]"
+
+# 4. Initialize config & workspace
+nanobot onboard
+
+# 5. Add an API key to ~/.nanobot/config.json (e.g. OpenRouter)
+# {
+#   "providers": {
+#     "openrouter": { "apiKey": "sk-or-v1-xxx" }
+#   }
+# }
+
+# 6. Verify everything works
+nanobot status
+nanobot agent -m "Hello!"
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run a specific test file
+pytest tests/test_commands.py
+
+# Run a specific test function
+pytest tests/test_commands.py::test_onboard_fresh_install
+
+# Verbose output
+pytest -v
+```
+
+Tests use `pytest-asyncio` (auto mode) for async tests and `unittest.mock` for mocking config/paths.
+
+### Linting & Formatting
+
+The project uses [Ruff](https://docs.astral.sh/ruff/) for both linting and formatting.
+
+```bash
+# Check for lint errors
+ruff check nanobot/
+
+# Auto-fix lint errors
+ruff check --fix nanobot/
+
+# Format code
+ruff format nanobot/
+```
+
+Rules configured: `E` (pycodestyle), `F` (Pyflakes), `I` (isort), `N` (naming), `W` (whitespace). Line length: 100 chars.
+
+### Debugging
+
+```bash
+# Run agent with runtime logs visible
+nanobot agent -m "test" --logs
+
+# Run gateway in verbose mode
+nanobot gateway --verbose
+```
+
+### Building the WhatsApp Bridge (optional)
+
+Only needed if you're working on WhatsApp integration:
+
+```bash
+cd bridge
+npm install
+npm run build
+```
+
+### Key Extension Points
+
+<details>
+<summary><b>Adding a New Tool</b></summary>
+
+1. Create `nanobot/agent/tools/mytool.py` extending the `Tool` base class
+2. Implement `name`, `description`, `parameters` (JSON schema), and `execute(**kwargs)`
+3. Register it in the `AgentLoop` tool setup
+
+```python
+from nanobot.agent.tools.base import Tool
+
+class MyTool(Tool):
+    name = "my_tool"
+    description = "Does something useful"
+    parameters = {
+        "type": "object",
+        "properties": {
+            "input": {"type": "string", "description": "The input value"}
+        },
+        "required": ["input"]
+    }
+
+    async def execute(self, **kwargs):
+        return f"Result: {kwargs['input']}"
+```
+
+</details>
+
+<details>
+<summary><b>Adding a New Channel</b></summary>
+
+1. Create `nanobot/channels/myservice.py` extending `Channel`
+2. Implement `start()`, `stop()`, and message sending logic
+3. Subscribe to the inbound message bus
+4. Add a config class to `nanobot/config/schema.py`
+5. Register in `ChannelManager.start_all()`
+
+</details>
+
+<details>
+<summary><b>Creating a Custom Skill</b></summary>
+
+Skills are Markdown files that give the agent domain-specific instructions:
+
+1. Create `~/.nanobot/workspace/skills/myskill/SKILL.md`
+2. Write instructions, examples, and notes in Markdown
+3. The agent will auto-discover and use it
+
+See `nanobot/skills/README.md` for the full skill format.
+
+</details>
+
+### Architecture Overview
+
+| Component | Path | Role |
+|-----------|------|------|
+| **Agent Loop** | `nanobot/agent/loop.py` | Core LLM ↔ tool execution cycle |
+| **Context Builder** | `nanobot/agent/context.py` | Assembles prompts from workspace files |
+| **Memory** | `nanobot/agent/memory.py` | Two-layer: `MEMORY.md` (facts) + `HISTORY.md` (events) |
+| **Message Bus** | `nanobot/bus/` | Async inbound/outbound queues decoupling channels from agent |
+| **Provider Registry** | `nanobot/providers/registry.py` | Single registry for 18+ LLM providers |
+| **Session Manager** | `nanobot/session/manager.py` | JSONL-based per-channel conversation storage |
+| **Tool Registry** | `nanobot/agent/tools/registry.py` | Manages built-in + MCP tools |
+| **Channel Manager** | `nanobot/channels/manager.py` | Starts/stops all enabled channel integrations |
+| **Cron Service** | `nanobot/cron/service.py` | Scheduled task execution (cron, interval, one-time) |
+| **Config Schema** | `nanobot/config/schema.py` | Pydantic models for all config sections |
+
+### PR Workflow
+
+```bash
+# Create a feature branch
+git checkout -b feature/my-feature
+
+# Make changes, then lint and test
+ruff check --fix nanobot/
+ruff format nanobot/
+pytest
+
+# Commit and push
+git add .
+git commit -m "feat: description of change"
+git push origin feature/my-feature
+```
+
+Then open a PR against `main`. Use conventional commit prefixes: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`.
+
+---
+
 ## 🤝 Contribute & Roadmap
 
 PRs welcome! The codebase is intentionally small and readable. 🤗
