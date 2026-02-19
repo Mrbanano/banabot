@@ -460,6 +460,48 @@ Después del rebranding:
 
 ---
 
+## 10. Versionado e Historial de Git
+
+### Decisión: NO reescribir historial de Git
+
+**¿Por qué no reescribir el historial?**
+
+| Razón | Explicación |
+|-------|-------------|
+| **Destructivo** | Requiere force push, rompe todos los clones existentes |
+| **Complejo** | Requiere `git filter-branch` o `git-filter-repo` |
+| **Riesgoso** | Puede perder commits, tags, o referencias |
+| **Innecesario** | CHANGELOG.md documenta correctamente las versiones |
+| **Práctica común** | Muchos forks de OSS mantienen el historial original |
+
+### Versionado Adoptado
+
+```
+v0.0.1 - Nacimiento de banobot (fork + rebranding)
+v0.1.0 - Multi-provider web search system
+v0.2.0 - CLI interactivo mejorado + branding completo
+```
+
+### Dónde se define la versión
+
+| Archivo | Contenido |
+|---------|-----------|
+| `pyproject.toml` | `version = "0.2.0"` |
+| `banobot/__init__.py` | `__version__ = "0.2.0"` |
+| `CHANGELOG.md` | Documentación de releases |
+
+### Mapeo de Commits a Versiones
+
+| Versión | Commit | Descripción |
+|---------|--------|-------------|
+| 0.0.1 | dc3b61e, b8dbc7e, b35c7f2 | Fork + rebranding inicial |
+| 0.1.0 | 278cdbc | Multi-provider web search |
+| 0.2.0 | b3f2641 | CLI interactivo + branding |
+
+> **Nota**: El historial de git muestra commits del nanobot original. Esto es **intencional y correcto** - preserva la proveniencia del código y los créditos a los autores originales.
+
+---
+
 **Documento creado**: 2026-02-19
 **Autor**: Equipo banobot
 **Basado en**: nanobot (https://github.com/HKUDS/nanobot)
