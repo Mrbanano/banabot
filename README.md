@@ -108,7 +108,7 @@ pip install nanobot-ai
 
 > [!TIP]
 > Set your API key in `~/.nanobot/config.json`.
-> Get API keys: [OpenRouter](https://openrouter.ai/keys) (Global) · [Brave Search](https://brave.com/search/api/) (optional, for web search)
+> Get API keys: [OpenRouter](https://openrouter.ai/keys) (Global) · Web search works out-of-the-box with DuckDuckGo (free)
 
 **1. Initialize**
 
@@ -778,6 +778,43 @@ MCP tools are automatically discovered and registered on startup. The LLM can us
 |--------|---------|-------------|
 | `tools.restrictToWorkspace` | `false` | When `true`, restricts **all** agent tools (shell, file read/write/edit, list) to the workspace directory. Prevents path traversal and out-of-scope access. |
 | `channels.*.allowFrom` | `[]` (allow all) | Whitelist of user IDs. Empty = allow everyone; non-empty = only listed users can interact. |
+
+
+### Web Search
+
+nanobot supports multiple search providers — **works out-of-the-box with DuckDuckGo (free, no API key required)**.
+
+| Provider | API Key | Get Key |
+|----------|---------|---------|
+| `duckduckgo` (default) | No | — |
+| `brave` | Yes | [Brave Search API](https://brave.com/search/api/) |
+| `tavily` | Yes | [Tavily](https://tavily.com/) |
+| `serper` | Yes | [Serper](https://serper.dev/) |
+| `searxng` | No (self-hosted) | [SearXNG](https://searxng.org/) |
+
+**Configuration** (`~/.nanobot/config.json`):
+
+```json
+{
+  "tools": {
+    "web": {
+      "search": {
+        "defaultProvider": "duckduckgo",
+        "maxResults": 5,
+        "providers": {
+          "brave": { "apiKey": "YOUR_KEY", "enabled": true },
+          "duckduckgo": { "enabled": true },
+          "tavily": { "apiKey": "YOUR_KEY", "enabled": false },
+          "serper": { "apiKey": "YOUR_KEY", "enabled": false },
+          "searxng": { "apiBase": "http://localhost:8080", "enabled": false }
+        }
+      }
+    }
+  }
+}
+```
+
+If no `defaultProvider` is set, uses DuckDuckGo (free). Set `defaultProvider` to use a different provider by default.
 
 
 ## CLI Reference
