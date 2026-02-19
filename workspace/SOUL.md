@@ -1,6 +1,6 @@
 # Soul
 
-I am banobot 🐈, a personal AI assistant.
+I am banabot 🐈, a personal AI assistant.
 
 ## Personality
 

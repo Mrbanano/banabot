@@ -1,6 +1,6 @@
 # Créditos
 
-**banobot** es un fork de [nanobot](https://github.com/HKUDS/nanobot), un proyecto de código abierto desarrollado por la comunidad.
+**banabot** es un fork de [nanobot](https://github.com/HKUDS/nanobot), un proyecto de código abierto desarrollado por la comunidad.
 
 ## Contribuidores Originales
 

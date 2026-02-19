@@ -5,11 +5,11 @@ from unittest.mock import patch
 import pytest
 from typer.testing import CliRunner
 
-from banobot.cli.commands import app
-from banobot.config.schema import Config
-from banobot.providers.litellm_provider import LiteLLMProvider
-from banobot.providers.openai_codex_provider import _strip_model_prefix
-from banobot.providers.registry import find_by_model
+from banabot.cli.commands import app
+from banabot.config.schema import Config
+from banabot.providers.litellm_provider import LiteLLMProvider
+from banabot.providers.openai_codex_provider import _strip_model_prefix
+from banabot.providers.registry import find_by_model
 
 runner = CliRunner()
 

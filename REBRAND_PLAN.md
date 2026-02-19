@@ -1,8 +1,8 @@
-# Plan de Rebranding: nanobot → banobot
+# Plan de Rebranding: nanobot → banabot
 
 ## Resumen Ejecutivo
 
-Este documento describe el proceso completo para migrar el proyecto `nanobot` a `banobot`, incluyendo consideraciones legales, técnicas y éticas.
+Este documento describe el proceso completo para migrar el proyecto `nanobot` a `banabot`, incluyendo consideraciones legales, técnicas y éticas.
 
 ---
 
@@ -53,7 +53,7 @@ copies of the Software...
 ```markdown
 ## Agradecimientos
 
-**banobot** es un fork de [nanobot](https://github.com/HKUDS/nanobot), 
+**banabot** es un fork de [nanobot](https://github.com/HKUDS/nanobot), 
 un proyecto de código abierto desarrollado por la comunidad.
 
 Agradecemos a todos los contribuidores originales de nanobot:
@@ -67,7 +67,7 @@ Agradecemos a todos los contribuidores originales de nanobot:
 ```markdown
 # Créditos
 
-banobot es un fork de nanobot (https://github.com/HKUDS/nanobot)
+banabot es un fork de nanobot (https://github.com/HKUDS/nanobot)
 
 ## Contribuidores Originales
 Este proyecto no sería posible sin el trabajo de los contribuidores de nanobot.
@@ -104,7 +104,7 @@ MIT License - Copyright (c) 2025 nanobot contributors
 
 #### A. Código Python (Imports y Referencias)
 ```
-nanobot/ → banobot/
+nanobot/ → banabot/
 ├── agent/
 ├── bus/
 ├── channels/
@@ -120,10 +120,10 @@ nanobot/ → banobot/
 
 #### B. Configuración del Paquete
 - `pyproject.toml`: nombre, scripts, packages
-- CLI command: `nanobot` → `banobot`
+- CLI command: `nanobot` → `banabot`
 
 #### C. Rutas del Sistema
-- `~/.nanobot` → `~/.banobot`
+- `~/.nanobot` → `~/.banabot`
 - Environment: `NANOBOT_*` → `BANOBOT_*`
 
 #### D. Documentación
@@ -134,8 +134,8 @@ nanobot/ → banobot/
 - `nanobot/skills/**/*.md`
 
 #### E. Assets
-- `nanobot_logo.png` → `banobot_logo.png`
-- `nanobot_arch.png` → `banobot_arch.png`
+- `nanobot_logo.png` → `banabot_logo.png`
+- `nanobot_arch.png` → `banabot_arch.png`
 
 #### F. Tests y Scripts
 - `tests/*.py`
@@ -159,23 +159,23 @@ nanobot/ → banobot/
 **Comandos:**
 ```bash
 git tag pre-rebrand-backup
-git checkout -b rebrand-banobot
+git checkout -b rebrand-banabot
 ```
 
 ---
 
 ### FASE 2: Renombrar Directorio Principal
 
-**Objetivo**: Cambiar `nanobot/` → `banobot/`
+**Objetivo**: Cambiar `nanobot/` → `banabot/`
 
 | Tarea | Descripción |
 |-------|-------------|
-| 2.1 | Renombrar directorio `nanobot/` → `banobot/` |
+| 2.1 | Renombrar directorio `nanobot/` → `banabot/` |
 | 2.2 | Actualizar `pyproject.toml` packages |
 
 **Comandos:**
 ```bash
-git mv nanobot banobot
+git mv nanobot banabot
 ```
 
 ---
@@ -203,25 +203,25 @@ packages = ["nanobot"]
 
 # DESPUÉS
 [project]
-name = "banobot-ai"
+name = "banabot-ai"
 version = "0.1.4"
-authors = [{name = "banobot contributors"}]
+authors = [{name = "banabot contributors"}]
 
 [project.scripts]
-banobot = "banobot.cli.commands:app"
+banabot = "banabot.cli.commands:app"
 
 [tool.hatch.build.targets.wheel]
-packages = ["banobot"]
+packages = ["banabot"]
 
 [tool.hatch.build.targets.wheel.sources]
-"banobot" = "banobot"
+"banabot" = "banabot"
 ```
 
 ---
 
 ### FASE 4: Actualizar Imports (Python)
 
-**Objetivo**: Reemplazar todos los imports `from nanobot` → `from banobot`
+**Objetivo**: Reemplazar todos los imports `from nanobot` → `from banabot`
 
 **Archivos afectados**: ~55 archivos Python
 
@@ -229,35 +229,35 @@ packages = ["banobot"]
 
 ```bash
 # Reemplazo en archivos Python
-find banobot -name "*.py" -exec sed -i '' 's/from nanobot/from banobot/g' {} \;
-find banobot -name "*.py" -exec sed -i '' 's/import nanobot/import banobot/g' {} \;
+find banabot -name "*.py" -exec sed -i '' 's/from nanobot/from banabot/g' {} \;
+find banabot -name "*.py" -exec sed -i '' 's/import nanobot/import banabot/g' {} \;
 
 # Reemplazo en tests
-find tests -name "*.py" -exec sed -i '' 's/from nanobot/from banobot/g' {} \;
-find tests -name "*.py" -exec sed -i '' 's/import nanobot/import banobot/g' {} \;
+find tests -name "*.py" -exec sed -i '' 's/from nanobot/from banabot/g' {} \;
+find tests -name "*.py" -exec sed -i '' 's/import nanobot/import banabot/g' {} \;
 ```
 
 ---
 
 ### FASE 5: Actualizar Rutas de Configuración
 
-**Objetivo**: Cambiar `~/.nanobot` → `~/.banobot`
+**Objetivo**: Cambiar `~/.nanobot` → `~/.banabot`
 
 **Archivos clave:**
-- `banobot/config/loader.py`
-- `banobot/config/schema.py`
-- `banobot/utils/helpers.py`
-- `banobot/cli/commands.py`
-- `banobot/session/manager.py`
-- `banobot/channels/*.py`
-- `banobot/skills/clawhub/SKILL.md`
-- `banobot/skills/tmux/SKILL.md`
+- `banabot/config/loader.py`
+- `banabot/config/schema.py`
+- `banabot/utils/helpers.py`
+- `banabot/cli/commands.py`
+- `banabot/session/manager.py`
+- `banabot/channels/*.py`
+- `banabot/skills/clawhub/SKILL.md`
+- `banabot/skills/tmux/SKILL.md`
 
 **Reemplazos:**
 ```bash
 # Rutas de configuración
-find . -name "*.py" -exec sed -i '' 's/\.nanobot/.banobot/g' {} \;
-find . -name "*.md" -exec sed -i '' 's/\.nanobot/.banobot/g' {} \;
+find . -name "*.py" -exec sed -i '' 's/\.nanobot/.banabot/g' {} \;
+find . -name "*.md" -exec sed -i '' 's/\.nanobot/.banabot/g' {} \;
 
 # Variables de entorno
 find . -name "*.py" -exec sed -i '' 's/NANOBOT_/BANOBOT_/g' {} \;
@@ -282,7 +282,7 @@ find . -name "*.md" -exec sed -i '' 's/NANOBOT_/BANOBOT_/g' {} \;
 - `workspace/memory/MEMORY.md`
 
 **Cambios en README.md:**
-1. Título: "nanobot" → "banobot"
+1. Título: "nanobot" → "banabot"
 2. Descripción del proyecto
 3. Links de GitHub (HKUDS/nanobot → nuevo repo)
 4. Sección de contribuidores (ver sección 2)
@@ -298,8 +298,8 @@ find . -name "*.md" -exec sed -i '' 's/NANOBOT_/BANOBOT_/g' {} \;
 
 | Tarea | Descripción |
 |-------|-------------|
-| 7.1 | Renombrar `nanobot_logo.png` → `banobot_logo.png` |
-| 7.2 | Renombrar `nanobot_arch.png` → `banobot_arch.png` |
+| 7.1 | Renombrar `nanobot_logo.png` → `banabot_logo.png` |
+| 7.2 | Renombrar `nanobot_arch.png` → `banabot_arch.png` |
 | 7.3 | Actualizar referencias en README.md |
 | 7.4 | Actualizar `bridge/package.json` |
 | 7.5 | Actualizar `docker-compose.yml` |
@@ -314,10 +314,10 @@ find . -name "*.md" -exec sed -i '' 's/NANOBOT_/BANOBOT_/g' {} \;
 | Tarea | Comando |
 |-------|---------|
 | 8.1 Reinstalar paquete | `pip install -e .` |
-| 8.2 Verificar CLI | `banobot --help` |
+| 8.2 Verificar CLI | `banabot --help` |
 | 8.3 Correr tests | `pytest tests/` |
-| 8.4 Linting | `ruff check banobot/` |
-| 8.5 Probar imports | `python -c "from banobot import ..."` |
+| 8.4 Linting | `ruff check banabot/` |
+| 8.5 Probar imports | `python -c "from banabot import ..."` |
 
 ---
 
@@ -327,11 +327,11 @@ find . -name "*.md" -exec sed -i '' 's/NANOBOT_/BANOBOT_/g' {} \;
 
 ```bash
 git add -A
-git commit -m "refactor: rebrand nanobot to banobot
+git commit -m "refactor: rebrand nanobot to banabot
 
-- Rename package from nanobot-ai to banobot-ai
-- Change CLI command from 'nanobot' to 'banobot'
-- Update config path from ~/.nanobot to ~/.banobot
+- Rename package from nanobot-ai to banabot-ai
+- Change CLI command from 'nanobot' to 'banabot'
+- Update config path from ~/.nanobot to ~/.banabot
 - Update env vars from NANOBOT_* to BANOBOT_*
 - Add CREDITS.md with attribution to original contributors
 - Keep MIT license with proper attribution
@@ -349,13 +349,13 @@ Fork of: https://github.com/HKUDS/nanobot"
 - [ ] Documentar créditos
 
 ### Código
-- [ ] Directorio renombrado `nanobot/` → `banobot/`
+- [ ] Directorio renombrado `nanobot/` → `banabot/`
 - [ ] Imports actualizados (55 archivos)
 - [ ] pyproject.toml actualizado
-- [ ] CLI command funciona: `banobot --help`
+- [ ] CLI command funciona: `banabot --help`
 
 ### Configuración
-- [ ] Rutas ~/.nanobot → ~/.banobot
+- [ ] Rutas ~/.nanobot → ~/.banabot
 - [ ] Env vars NANOBOT_* → BANOBOT_*
 - [ ] Variables en skills actualizadas
 
@@ -387,8 +387,8 @@ Si hay usuarios con configuración existente en `~/.nanobot`:
 # Script de migración sugerido
 #!/bin/bash
 if [ -d ~/.nanobot ]; then
-    echo "Migrando configuración de nanobot a banobot..."
-    mv ~/.nanobot ~/.banobot
+    echo "Migrando configuración de nanobot a banabot..."
+    mv ~/.nanobot ~/.banabot
     echo "Migración completada."
 fi
 ```
@@ -401,7 +401,7 @@ Opción: Mantener compatibilidad con `~/.nanobot` temporalmente:
 # En config/loader.py
 def get_config_path() -> Path:
     # Prioridad: nueva ubicación → ubicación antigua
-    new_path = Path.home() / ".banobot" / "config.json"
+    new_path = Path.home() / ".banabot" / "config.json"
     old_path = Path.home() / ".nanobot" / "config.json"
     
     if new_path.exists():
@@ -414,7 +414,7 @@ def get_config_path() -> Path:
 ### PyPI Publishing
 
 Después del rebranding:
-1. Registrar nuevo paquete `banobot-ai` en PyPI
+1. Registrar nuevo paquete `banabot-ai` en PyPI
 2. El paquete `nanobot-ai` original sigue existiendo (no eliminar)
 3. Considerar agregar nota en README de nanobot-ai apuntando al fork
 
@@ -452,11 +452,11 @@ Después del rebranding:
 ## 9. Post-Rebranding
 
 ### Tareas siguientes:
-1. Publicar en PyPI como `banobot-ai`
+1. Publicar en PyPI como `banabot-ai`
 2. Configurar CI/CD para el nuevo repo
 3. Actualizar documentación en línea
 4. Comunicar a usuarios (si aplica)
-5. Crear release inicial de banobot
+5. Crear release inicial de banabot
 
 ---
 
@@ -477,7 +477,7 @@ Después del rebranding:
 ### Versionado Adoptado
 
 ```
-v0.0.1 - Nacimiento de banobot (fork + rebranding)
+v0.0.1 - Nacimiento de banabot (fork + rebranding)
 v0.1.0 - Multi-provider web search system
 v0.2.0 - CLI interactivo mejorado + branding completo
 ```
@@ -487,7 +487,7 @@ v0.2.0 - CLI interactivo mejorado + branding completo
 | Archivo | Contenido |
 |---------|-----------|
 | `pyproject.toml` | `version = "0.2.0"` |
-| `banobot/__init__.py` | `__version__ = "0.2.0"` |
+| `banabot/__init__.py` | `__version__ = "0.2.0"` |
 | `CHANGELOG.md` | Documentación de releases |
 
 ### Mapeo de Commits a Versiones
@@ -503,5 +503,5 @@ v0.2.0 - CLI interactivo mejorado + branding completo
 ---
 
 **Documento creado**: 2026-02-19
-**Autor**: Equipo banobot
+**Autor**: Equipo banabot
 **Basado en**: nanobot (https://github.com/HKUDS/nanobot)

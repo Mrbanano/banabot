@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from prompt_toolkit.formatted_text import HTML
 
-from banobot.cli import commands
+from banabot.cli import commands
 
 
 @pytest.fixture
