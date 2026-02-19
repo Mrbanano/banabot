@@ -188,12 +188,17 @@ def onboard():
     # Create default bootstrap files
     _create_workspace_templates(workspace)
     
-    console.print(f"\n{__logo__} nanobot is ready!")
-    console.print("\nNext steps:")
-    console.print("  1. Add your API key to [cyan]~/.nanobot/config.json[/cyan]")
-    console.print("     Get one at: https://openrouter.ai/keys")
-    console.print("  2. Chat: [cyan]nanobot agent -m \"Hello!\"[/cyan]")
-    console.print("\n[dim]Want Telegram/WhatsApp? See: https://github.com/HKUDS/nanobot#-chat-apps[/dim]")
+    console.print(f"\n{__logo__} nanobot is ready!\n")
+
+    # 🍌 Launch Banabot interactive wizard
+    if typer.confirm("🍌 ¿Configurar Banabot ahora? / Configure Banabot now?", default=True):
+        from nanobot.cli.config_wizard import config_wizard
+        config = load_config()
+        config = config_wizard(config)
+        save_config(config)
+    else:
+        console.print("  Configura después con: [cyan]nanobot banabot config[/cyan]")
+        console.print("  Configure later with: [cyan]nanobot banabot config[/cyan]")
 
 
 
@@ -998,6 +1003,25 @@ def _login_github_copilot() -> None:
     except Exception as e:
         console.print(f"[red]Authentication error: {e}[/red]")
         raise typer.Exit(1)
+
+
+# ============================================================================
+# 🍌 Banabot commands
+# ============================================================================
+
+banabot_app = typer.Typer(help="🍌 Banabot commands")
+app.add_typer(banabot_app, name="banabot")
+
+
+@banabot_app.command(name="config")
+def banabot_config():
+    """🍌 Configurar Banabot de forma interactiva / Interactive Banabot setup."""
+    from nanobot.config.loader import load_config, save_config
+    from nanobot.cli.config_wizard import config_wizard
+
+    cfg = load_config()
+    cfg = config_wizard(cfg)
+    save_config(cfg)
 
 
 if __name__ == "__main__":
