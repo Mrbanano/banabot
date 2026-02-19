@@ -54,7 +54,7 @@
 ## 🏗️ Architecture
 
 <p align="center">
-  <img src="banobot_arch.png" alt="nanobot architecture" width="800">
+  <img src="banobot_arch.png" alt="banobot architecture" width="800">
 </p>
 
 ## ✨ Features
