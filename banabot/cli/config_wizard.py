@@ -685,7 +685,7 @@ def config_wizard(config: Config) -> Config:
         else:
             key = _prompt_api_key(provider, lang)
             prov_cfg = getattr(config.providers, provider)
-            prov_cfg.api_key = key
+            prov_cfg.api_key = key.strip().lstrip("-").strip()
 
     # Step 3: Channel
     channel = _select_channel(config, lang)
