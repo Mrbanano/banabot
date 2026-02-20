@@ -1,8 +1,5 @@
 """Tests for timezone, telegram, and config utilities."""
 
-import pytest
-from unittest.mock import AsyncMock, patch
-
 from banabot.cli.config_wizard import POPULAR_TIMEZONES
 
 

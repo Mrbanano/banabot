@@ -120,7 +120,7 @@ class WebSearchTool(Tool):
 
             try:
                 backend = self._get_backend(provider_name)
-                result = await backend.search(query, n)
+                result = await backend.search(query, n)  # type: ignore[union-attr]
                 if result.lower().startswith("error"):
                     errors.append(f"{provider_name}: {result}")
                     continue
@@ -165,7 +165,11 @@ class WebFetchTool(Tool):
         self.max_chars = max_chars
 
     async def execute(
-        self, url: str, extractMode: str = "markdown", maxChars: int | None = None, **kwargs: Any  # noqa: N803
+        self,
+        url: str,
+        extractMode: str = "markdown",  # noqa: N803
+        maxChars: int | None = None,  # noqa: N803
+        **kwargs: Any,
     ) -> str:
         from readability import Document
 

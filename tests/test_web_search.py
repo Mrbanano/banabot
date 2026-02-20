@@ -4,21 +4,21 @@ import pytest
 
 from banabot.agent.tools.search_registry import (
     SEARCH_PROVIDERS,
-    SearchProviderSpec,
-    find_search_provider,
-    create_search_backend,
-    DuckDuckGoBackend,
     BraveSearchBackend,
-    TavilyBackend,
-    SerperBackend,
+    DuckDuckGoBackend,
+    SearchProviderSpec,
     SearXNGBackend,
+    SerperBackend,
+    TavilyBackend,
+    create_search_backend,
+    find_search_provider,
 )
 from banabot.agent.tools.web import (
-    _strip_tags,
-    _normalize,
-    _validate_url,
-    WebSearchTool,
     WebFetchTool,
+    WebSearchTool,
+    _normalize,
+    _strip_tags,
+    _validate_url,
 )
 
 
