@@ -19,16 +19,16 @@
 
 ## Memoria y Contexto
 
-### Configuración de Modelo
-- [ ] **Tabla de modelos** — Crear tabla con tokens máximos, mínimos y recomendados por modelo:
-  - GPT-4o: ~128K tokens
-  - GPT-4o-mini: ~128K tokens  
-  - Claude Opus 4.5: ~200K tokens
-  - Claude Sonnet 4.5: ~200K tokens
-  - DeepSeek Chat: ~64K tokens
-  - Gemini 2.5 Pro: ~1M tokens
-- [ ] **Ajustar max_tokens dinámicamente** — Según el modelo seleccionado, configurar valores óptimos
-- [ ] **Configuración de temperatura** — Agregar al wizard con valores recomendados por tipo de uso
+### Configuración de Modelo ✅ COMPLETADO
+- [x] **Tabla de modelos** — Crear tabla con tokens máximos, mínimos y recomendados por modelo:
+  - GPT-4o: ~128K tokens → 50K max_tokens
+  - GPT-4o-mini: ~128K tokens → 50K max_tokens
+  - Claude Opus 4.5: ~200K tokens → 80K max_tokens
+  - Claude Sonnet 4.5: ~200K tokens → 80K max_tokens
+  - DeepSeek Chat: ~64K tokens → 25K max_tokens
+  - Gemini 2.5 Pro: ~1M tokens → 100K max_tokens
+- [x] **Ajustar max_tokens dinámicamente** — Según el modelo seleccionado, configurar valores óptimos
+- [x] **Configuración de temperatura** — Agregar al wizard con valores recomendados por tipo de uso
 
 ### Memoria a Medio Plazo
 - [ ] **Resúmenes de conversaciones** — Guardar resúmenes temporales (1 mes)
