@@ -1,0 +1,29 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: set up python
+        run: uv python install 3.11
+
+      - name: install dependencies
+        run: uv sync --extra dev
+
+      - name: run tests
+        run: uv run pytest tests/ -v
+
+      - name: run lint
+        run: uv run ruff check src/banabot/
