@@ -5,6 +5,7 @@ import os
 import select
 import signal
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 import typer
@@ -310,7 +311,7 @@ def _make_provider(config: Config):
 
     from banabot.providers.registry import find_by_name
 
-    spec = find_by_name(provider_name)
+    spec = find_by_name(provider_name) if provider_name else None
     if not model.startswith("bedrock/") and not (p and p.api_key) and not (spec and spec.is_oauth):
         console.print("[red]Error: No API key configured.[/red]")
         console.print("Set one in ~/.banabot/config.json under providers section")
@@ -944,7 +945,7 @@ provider_app = typer.Typer(help="Manage providers")
 app.add_typer(provider_app, name="provider")
 
 
-_LOGIN_HANDLERS: dict[str, callable] = {}
+_LOGIN_HANDLERS: dict[str, Callable] = {}
 
 
 def _register_login(name: str):

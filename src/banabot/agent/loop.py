@@ -8,7 +8,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Awaitable, Callable
 
 if TYPE_CHECKING:
-    from banabot.config.schema import CronService, ExecToolConfig, WebSearchConfig
+    from banabot.config.schema import ExecToolConfig, WebSearchConfig
+    from banabot.cron.service import CronService
 
 import json_repair
 from loguru import logger

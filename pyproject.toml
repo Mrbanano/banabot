@@ -51,6 +51,7 @@ dev = [
     "pytest>=9.0.0,<10.0.0",
     "pytest-asyncio>=1.3.0,<2.0.0",
     "ruff>=0.1.0",
+    "pre-commit>=4.5.1",
 ]
 
 [project.urls]
@@ -96,6 +97,24 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W"]
 ignore = ["E501"]
+
+[tool.pyright]
+pythonVersion = "3.11"
+venvPath = "."
+venv = ".venv"
+include = ["src/banabot"]
+exclude = [
+    "tests",
+    "src/banabot/channels",        # third-party channel SDKs without stubs
+    "src/banabot/cli/config_wizard.py",  # InquirerPy has no stubs
+    "src/banabot/providers",       # litellm/httpx complex generics
+]
+typeCheckingMode = "basic"
+reportMissingTypeStubs = false
+reportPrivateImportUsage = false
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportUnknownArgumentType = false
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
