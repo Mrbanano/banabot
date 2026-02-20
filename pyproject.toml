@@ -1,13 +1,14 @@
 [project]
 name = "banabot-ai"
-version = "0.2.0"
-description = "A lightweight personal AI assistant framework"
+version = "0.3.0"
+description = "🍌 A lightweight personal AI assistant framework"
 requires-python = ">=3.11"
 license = {text = "MIT"}
+readme = "README.md"
 authors = [
     {name = "banabot contributors"}
 ]
-keywords = ["ai", "agent", "chatbot"]
+keywords = ["ai", "agent", "chatbot", "banabot", "cli"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -15,6 +16,13 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Mrbanano/banabot"
+Repository = "https://github.com/Mrbanano/banabot"
+Issues = "https://github.com/Mrbanano/banabot/issues"
+"Chat de la comunidad" = "https://t.me/bananobot_chat"
+Logo = "https://raw.githubusercontent.com/Mrbanano/banobot/main/img/banabot-logo.png"
 
 dependencies = [
     "typer>=0.20.0,<1.0.0",

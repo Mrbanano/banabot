@@ -8,6 +8,7 @@ For detailed release notes, see individual version files in the [`changelog/`](.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| [0.3.0](./changelog/0.3.0.md) | 2026-02-19 | Onboarding & timezone fixes |
 | [0.2.0](./changelog/0.2.0.md) | 2026-02-19 | 🍌 Final rebranding to banabot |
 | [0.1.0](./changelog/0.1.0.md) | 2026-02-19 | Multi-provider web search system |
 | [0.0.1](./changelog/0.0.1.md) | 2026-02-19 | 🍌 Birth of banabot (fork from nanobot) |
