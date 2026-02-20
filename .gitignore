@@ -27,3 +27,4 @@ workspace/
 docs/issues/*
 
 .claude
+.ruff_cache
