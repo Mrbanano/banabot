@@ -322,6 +322,7 @@ class Config(BaseSettings):
     """Root configuration for banabot."""
 
     language: str = "es"  # Preferred language for wizard and bot context (es, en, ...)
+    timezone: str = "America/Mexico_City"  # IANA timezone for cron jobs and scheduling
     agents: AgentsConfig = Field(default_factory=AgentsConfig)
     channels: ChannelsConfig = Field(default_factory=ChannelsConfig)
     providers: ProvidersConfig = Field(default_factory=ProvidersConfig)

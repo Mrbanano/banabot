@@ -1,7 +1,10 @@
 {
   "lang_prompt": "¿En qué idioma prefieres usar Banabot?\nWhat language do you prefer?",
   "lang_select": "Select an option",
-  "step_provider_title": "🍌 Step 1 of 3 — Choose your AI provider",
+  "tz_prompt": "🌐 What timezone are you in?",
+  "tz_select": "Select your timezone",
+  "tz_help": "This is important so scheduled tasks (reminders, crons) run at the correct time.",
+  "step_provider_title": "🍌 Step 1 of 4 — Choose your AI provider",
   "step_provider_help": "A provider is the service that powers your bot's intelligence.\nIf you're not sure which one to pick, we recommend OpenRouter 🍌\nIt's the easiest: one key gives you access to many models.",
   "step_provider_more": "More providers...",
 
@@ -15,11 +18,11 @@
   "step_key_prompt": "Paste your API key",
   "step_key_success": "✓ Provider configured! 🍌",
 
-  "step_channel_title": "🍌 Step 2 of 3 — Where do you want to use your bot?",
+  "step_channel_title": "🍌 Step 2 of 4 — Where do you want to use your bot?",
   "step_channel_help": "Choose the app where your bot will send and receive messages.\nYou can add more later with: banabot config",
   "step_channel_skip": "⏭️  Skip for now",
 
-  "step_finish_title": "🍌 Step 3 of 3 — Almost done!",
+  "step_finish_title": "🍌 Step 3 of 4 — Almost done!",
   "step_finish_help": "You have the essentials configured. Want to tweak anything else?",
   "step_finish_standard": "🍌 Save and start (recommended)",
   "step_finish_standard_desc": "All set, your bot is configured with sensible defaults.",

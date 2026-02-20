@@ -54,6 +54,7 @@ class AgentLoop:
         restrict_to_workspace: bool = False,
         session_manager: SessionManager | None = None,
         mcp_servers: dict | None = None,
+        timezone: str = "America/Mexico_City",
     ):
         from banabot.config.schema import ExecToolConfig, WebSearchConfig
         from banabot.cron.service import CronService
@@ -69,6 +70,7 @@ class AgentLoop:
         self.exec_config = exec_config or ExecToolConfig()
         self.cron_service = cron_service
         self.restrict_to_workspace = restrict_to_workspace
+        self.timezone = timezone
 
         self.context = ContextBuilder(workspace)
         self.sessions = session_manager or SessionManager(workspace)
@@ -121,7 +123,8 @@ class AgentLoop:
         
         # Cron tool (for scheduling)
         if self.cron_service:
-            self.tools.register(CronTool(self.cron_service))
+            from banabot.agent.tools.cron import CronTool
+            self.tools.register(CronTool(self.cron_service, default_timezone=self.timezone))
     
     async def _connect_mcp(self) -> None:
         """Connect to configured MCP servers (one-time, lazy)."""

@@ -373,6 +373,7 @@ def gateway(
         restrict_to_workspace=config.tools.restrict_to_workspace,
         session_manager=session_manager,
         mcp_servers=config.tools.mcp_servers,
+        timezone=config.timezone,
     )
     
     # Set cron callback (needs agent)
