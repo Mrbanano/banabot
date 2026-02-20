@@ -227,6 +227,7 @@ def onboard():
     _print_welcome_banner()
 
     config_path = get_config_path()
+    overwrite = False
 
     if config_path.exists():
         console.print(f"[yellow]Config already exists at {config_path}[/yellow]")
@@ -237,6 +238,7 @@ def onboard():
         if typer.confirm("Overwrite?"):
             config = Config()
             save_config(config)
+            overwrite = True
             console.print(f"[green]✓[/green] Config reset to defaults at {config_path}")
         else:
             config = load_config()
@@ -256,7 +258,7 @@ def onboard():
         console.print(f"[green]✓[/green] Created workspace at {workspace}")
 
     # Create default bootstrap files
-    _create_workspace_templates(workspace)
+    _create_workspace_templates(workspace, overwrite=overwrite)
 
     console.print(f"\n{__logo__} banabot is ready!\n")
 
@@ -272,7 +274,7 @@ def onboard():
         console.print("  Configure later with: [cyan]banabot config[/cyan]")
 
 
-def _create_workspace_templates(workspace: Path):
+def _create_workspace_templates(workspace: Path, overwrite: bool = False):
     """Create default workspace template files."""
     templates = {
         "AGENTS.md": """# Agent Instructions
@@ -302,23 +304,32 @@ I am banabot, a lightweight AI assistant.
 - User privacy and safety
 - Transparency in actions
 """,
-        "USER.md": """# User
+        "USER.md": """# User Profile
 
-Information about the user goes here.
+## Identity
+- Name:
+- Call me:
+- Since:
 
 ## Preferences
+- Timezone:
+- Language:
+- Communication style:
+- Technical level:
 
-- Communication style: (casual/formal)
-- Timezone: (your timezone)
-- Language: (your preferred language)
+## Background
+- Interests:
+- Currently working on:
+- Notes:
 """,
     }
 
     for filename, content in templates.items():
         file_path = workspace / filename
-        if not file_path.exists():
+        if overwrite or not file_path.exists():
             file_path.write_text(content)
-            console.print(f"  [dim]Created {filename}[/dim]")
+            action = "Overwrote" if overwrite else "Created"
+            console.print(f"  [dim]{action} {filename}[/dim]")
 
     # Create memory directory and MEMORY.md
     memory_dir = workspace / "memory"
