@@ -221,8 +221,9 @@ class TelegramChannel(BaseChannel):
         try:
             chat_id = int(msg.chat_id)
         except ValueError:
-            logger.error(f"Invalid chat_id: {msg.chat_id}")
-            return
+            error_msg = f"Invalid chat_id: '{msg.chat_id}' - must be a numeric Telegram ID"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
 
         # Send media files
         for media_path in (msg.media or []):
