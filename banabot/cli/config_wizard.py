@@ -343,7 +343,7 @@ def _configure_telegram(ch_cfg: BaseModel, lang: str) -> None:
         message=t("telegram_token_prompt", lang),
         validate=lambda val: len(val.strip()) > 0,
     ).execute()
-    ch_cfg.token = token
+    ch_cfg.token = token.strip().lstrip("-").strip()
     console.print(f"[green]{t('telegram_token_success', lang)}[/green]\n")
 
     console.print(f"[dim]{t('telegram_restrict_question', lang)}[/dim]\n")
