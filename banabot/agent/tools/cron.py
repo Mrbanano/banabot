@@ -10,10 +10,11 @@ from banabot.cron.types import CronSchedule
 class CronTool(Tool):
     """Tool to schedule reminders and recurring tasks."""
     
-    def __init__(self, cron_service: CronService):
+    def __init__(self, cron_service: CronService, default_timezone: str = "America/Mexico_City"):
         self._cron = cron_service
         self._channel = ""
         self._chat_id = ""
+        self._default_timezone = default_timezone
     
     def set_context(self, channel: str, chat_id: str) -> None:
         """Set the current session context for delivery."""
@@ -99,6 +100,9 @@ class CronTool(Tool):
             return "Error: no session context (channel/chat_id)"
         if tz and not cron_expr:
             return "Error: tz can only be used with cron_expr"
+        
+        effective_tz = tz or self._default_timezone
+        
         if tz:
             from zoneinfo import ZoneInfo
             try:
@@ -111,7 +115,7 @@ class CronTool(Tool):
         if every_seconds:
             schedule = CronSchedule(kind="every", every_ms=every_seconds * 1000)
         elif cron_expr:
-            schedule = CronSchedule(kind="cron", expr=cron_expr, tz=tz)
+            schedule = CronSchedule(kind="cron", expr=cron_expr, tz=effective_tz)
         elif at:
             from datetime import datetime
             dt = datetime.fromisoformat(at)

@@ -90,6 +90,22 @@ CHANNEL_ORDER: list[str] = [
     "slack", "feishu", "dingtalk", "qq", "mochat",
 ]
 
+POPULAR_TIMEZONES: list[tuple[str, str]] = [
+    ("America/Mexico_City", "🌎 América Ciudad de México (UTC-6)"),
+    ("America/New_York", "🌎 América Nueva York (UTC-5)"),
+    ("America/Los_Angeles", "🌎 América Los Ángeles (UTC-8)"),
+    ("America/Bogota", "🌎 América Bogotá (UTC-5)"),
+    ("America/Buenos_Aires", "🌎 América Buenos Aires (UTC-3)"),
+    ("America/Santiago", "🌎 América Santiago (UTC-4)"),
+    ("Europe/Madrid", "🌍 Europa Madrid (UTC+1)"),
+    ("Europe/London", "🌍 Europa Londres (UTC+0)"),
+    ("Europe/Paris", "🌍 Europa París (UTC+1)"),
+    ("Asia/Tokyo", "🌏 Asia Tokio (UTC+9)"),
+    ("Asia/Shanghai", "🌏 Asia Shanghái (UTC+8)"),
+    ("Asia/Dubai", "🌏 Asia Dubái (UTC+4)"),
+    ("UTC", "🌍 UTC (Universal)"),
+]
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -147,6 +163,28 @@ def _select_language(config: Config) -> str:
 
     config.language = lang
     return lang
+
+
+# ---------------------------------------------------------------------------
+# Step 1b: Timezone
+# ---------------------------------------------------------------------------
+
+def _select_timezone(config: Config, lang: str) -> str:
+    """Arrow-key timezone selector."""
+    console.print(f"{t('tz_prompt', lang)}\n")
+    console.print(f"[dim]{t('tz_help', lang)}[/dim]\n")
+
+    choices = [Choice(value=tz, name=label) for tz, label in POPULAR_TIMEZONES]
+
+    tz = inquirer.select(
+        message=t("tz_select", lang),
+        choices=choices,
+        default=config.timezone if config.timezone in dict(POPULAR_TIMEZONES) else "America/Mexico_City",
+        pointer="❯",
+    ).execute()
+
+    config.timezone = tz
+    return tz
 
 
 # ---------------------------------------------------------------------------
@@ -671,6 +709,9 @@ def config_wizard(config: Config) -> Config:
 
     # Step 1: Language
     lang = _select_language(config)
+
+    # Step 1b: Timezone
+    _select_timezone(config, lang)
 
     # Step 2: Provider → Model → API Key
     provider = _select_provider(config, lang)

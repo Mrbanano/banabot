@@ -1,7 +1,10 @@
 {
   "lang_prompt": "¿En qué idioma prefieres usar Banabot?\nWhat language do you prefer?",
   "lang_select": "Selecciona una opción",
-  "step_provider_title": "🍌 Paso 1 de 3 — Elige tu proveedor de IA",
+  "tz_prompt": "🌐 ¿En qué zona horaria vives?",
+  "tz_select": "Selecciona tu zona horaria",
+  "tz_help": "Es importante para que las tareas programadas (recordatorios, crons) se ejecuten a la hora correcta.",
+  "step_provider_title": "🍌 Paso 1 de 4 — Elige tu proveedor de IA",
   "step_provider_help": "Un proveedor es el servicio que le da inteligencia a tu bot.\nSi no sabes cuál elegir, te recomendamos OpenRouter 🍌\nEs el más fácil: con una sola llave accedes a muchos modelos.",
   "step_provider_more": "Más proveedores...",
 
@@ -15,11 +18,11 @@
   "step_key_prompt": "Pega tu llave API",
   "step_key_success": "✓ ¡Proveedor configurado! 🍌",
 
-  "step_channel_title": "🍌 Paso 2 de 3 — ¿Dónde quieres usar tu bot?",
+  "step_channel_title": "🍌 Paso 2 de 4 — ¿Dónde quieres usar tu bot?",
   "step_channel_help": "Elige la app donde tu bot recibirá y enviará mensajes.\nPuedes agregar más después con: banabot config",
   "step_channel_skip": "⏭️  Saltar por ahora",
 
-  "step_finish_title": "🍌 Paso 3 de 3 — ¡Casi listo!",
+  "step_finish_title": "🍌 Paso 3 de 4 — ¡Casi listo!",
   "step_finish_help": "Ya tienes lo esencial configurado. ¿Quieres ajustar algo más?",
   "step_finish_standard": "🍌 Guardar y empezar (recomendado)",
   "step_finish_standard_desc": "Todo listo, tu bot está configurado con valores predeterminados.",
