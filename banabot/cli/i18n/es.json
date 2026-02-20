@@ -12,6 +12,12 @@
   "step_model_help": "El modelo es el \"cerebro\" de tu bot. Los más inteligentes cuestan más\npero dan mejores respuestas. Si no estás seguro, elige el recomendado.",
   "step_model_manual": "🔤 Escribir nombre del modelo manualmente",
   "step_model_manual_prompt": "Escribe el nombre del modelo (ejemplo: anthropic/claude-sonnet-4-5)",
+  "step_model_tokens_set": "Tokens máximos configurados: {tokens}",
+
+  "step_temperature_title": "🍌 Elige cómo quieres que responda tu bot",
+  "step_temperature_help": "La temperatura controla qué tan creativo o preciso es el bot.\n\n🎨 Creativo (0.8): Más imaginativo, para brainstorming y cosas divertidas\n⚖️ Equilibrado (0.4): Recomendado, buen balance entre creatividad y precisión\n📝 Conciso (0.2): Más preciso y directo, ideal para información factual",
+  "step_temperature_select": "¿Qué estilo prefieres?",
+  "step_temperature_set": "Temperatura configurada: {temp}",
 
   "step_key_title": "🍌 Último paso del proveedor — tu llave API",
   "step_key_help": "La llave API es como tu contraseña para usar el servicio.\nConsíguela aquí: {url}",
