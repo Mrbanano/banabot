@@ -10,9 +10,10 @@ import json
 from pathlib import Path
 
 # Available languages: code → display label
+# Using ISO 3166-1 alpha-2 codes with terminal-safe styling
 LANGUAGES: dict[str, str] = {
-    "es": "🇲🇽 Español",
-    "en": "🇺🇸 English",
+    "es": "[magenta]ES[/] Español",
+    "en": "[cyan]EN[/] English",
 }
 
 _I18N_DIR = Path(__file__).parent

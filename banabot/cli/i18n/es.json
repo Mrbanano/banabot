@@ -1,7 +1,6 @@
 {
   "lang_prompt": "¿En qué idioma prefieres usar Banabot?\nWhat language do you prefer?",
-  "lang_select": "Elige un número",
-
+  "lang_select": "Selecciona una opción",
   "step_provider_title": "🍌 Paso 1 de 3 — Elige tu proveedor de IA",
   "step_provider_help": "Un proveedor es el servicio que le da inteligencia a tu bot.\nSi no sabes cuál elegir, te recomendamos OpenRouter 🍌\nEs el más fácil: con una sola llave accedes a muchos modelos.",
   "step_provider_more": "Más proveedores...",
@@ -26,7 +25,7 @@
   "step_finish_standard_desc": "Todo listo, tu bot está configurado con valores predeterminados.",
   "step_finish_custom": "⚙️  Configuración avanzada",
   "step_finish_custom_desc": "Ajusta temperatura, tokens, gateway, herramientas, más canales...",
-  "step_finish_done": "🍌 ¡Configuración guardada! Tu bot está listo.\nPruébalo: nanobot agent -m \"¡Hola!\"",
+  "step_finish_done": "🍌 ¡Configuración guardada! Tu bot está listo.\nPruébalo: banabot agent -m \"¡Hola!\"",
 
   "advanced_title": "⚙️  Configuración avanzada",
   "advanced_agents": "🤖 Agente (modelo, temperatura, tokens máximos...)",
@@ -36,7 +35,7 @@
   "advanced_tools": "🛠️  Herramientas (búsqueda web, terminal, MCP)",
   "advanced_save": "🍌 Guardar y salir",
 
-  "select_number": "Elige un número",
+  "select_number": "Selecciona una opción",
   "back": "← Volver",
   "configured": "configurado",
   "enabled": "activado",
