@@ -16,6 +16,12 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Mrbanano/banabot"
+Repository = "https://github.com/Mrbanano/banabot"
+Issues = "https://github.com/Mrbanano/banabot/issues"
+
 dependencies = [
     "typer>=0.20.0,<1.0.0",
     "litellm>=1.81.5,<2.0.0",
@@ -53,13 +59,6 @@ dev = [
     "ruff>=0.1.0",
 ]
 
-[project.urls]
-Homepage = "https://github.com/Mrbanano/banabot"
-Repository = "https://github.com/Mrbanano/banabot"
-Issues = "https://github.com/Mrbanano/banabot/issues"
-Chat = "https://t.me/bananobot_chat"
-Logo = "https://raw.githubusercontent.com/Mrbanano/banabot/main/img/banabot-logo.png"
-
 [project.scripts]
 banabot = "banabot.cli.commands:app"
 
@@ -73,6 +72,7 @@ packages = ["banabot"]
 [tool.hatch.build.targets.wheel.sources]
 "banabot" = "banabot"
 
+# Include non-Python files in skills
 [tool.hatch.build]
 include = [
     "banabot/**/*.py",
