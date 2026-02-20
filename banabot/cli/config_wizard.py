@@ -70,6 +70,32 @@ PROVIDER_MODELS: dict[str, list[tuple[str, str]]] = {
     ],
 }
 
+MODEL_SPECS: dict[str, dict[str, int]] = {
+    "anthropic/claude-opus-4-5": {"max_context": 200000, "max_tokens": 80000},
+    "anthropic/claude-sonnet-4-5": {"max_context": 200000, "max_tokens": 80000},
+    "anthropic/claude-haiku-3-5": {"max_context": 200000, "max_tokens": 80000},
+    "openai/gpt-4o": {"max_context": 128000, "max_tokens": 50000},
+    "openai/gpt-4o-mini": {"max_context": 128000, "max_tokens": 50000},
+    "openai/o1": {"max_context": 128000, "max_tokens": 50000},
+    "deepseek/deepseek-chat": {"max_context": 64000, "max_tokens": 25000},
+    "deepseek/deepseek-reasoner": {"max_context": 64000, "max_tokens": 25000},
+    "google/gemini-2.5-pro": {"max_context": 1000000, "max_tokens": 100000},
+    "google/gemini-2.5-flash": {"max_context": 1000000, "max_tokens": 100000},
+    "gemini/gemini-2.5-pro": {"max_context": 1000000, "max_tokens": 100000},
+    "gemini/gemini-2.5-flash": {"max_context": 1000000, "max_tokens": 100000},
+    "groq/llama-3.3-70b-versatile": {"max_context": 128000, "max_tokens": 30000},
+    "groq/llama-3.1-8b-instant": {"max_context": 128000, "max_tokens": 30000},
+    "moonshot/kimi-k2.5": {"max_context": 1000000, "max_tokens": 80000},
+    "siliconflow/Qwen/Qwen2.5-72B-Instruct": {"max_context": 32000, "max_tokens": 15000},
+    "siliconflow/deepseek-ai/DeepSeek-V3": {"max_context": 64000, "max_tokens": 25000},
+}
+
+TEMPERATURE_PRESETS: dict[str, tuple[str, float]] = {
+    "creative": ("🎨 Creativo - Más imaginativo y variado", 0.8),
+    "balanced": ("⚖️ Equilibrado - Recomendado", 0.4),
+    "concise": ("📝 Conciso - Más preciso y directo", 0.2),
+}
+
 PROVIDER_HELP_URLS: dict[str, str] = {
     "openrouter": "https://openrouter.ai/keys",
     "anthropic": "https://console.anthropic.com/settings/keys",
@@ -263,6 +289,31 @@ def _select_model(provider: str, lang: str) -> str:
             validate=lambda val: len(val.strip()) > 0,
         ).execute()
     return result
+
+
+def _select_temperature(lang: str) -> float:
+    """Arrow-key temperature selector with presets."""
+    _section(t("step_temperature_title", lang))
+    console.print(f"[dim]{t('step_temperature_help', lang)}[/dim]\n")
+
+    choices = [Choice(value=key, name=label) for key, (label, _) in TEMPERATURE_PRESETS.items()]
+
+    result = inquirer.select(
+        message=t("step_temperature_select", lang),
+        choices=choices,
+        default="balanced",
+        pointer="❯",
+    ).execute()
+
+    return TEMPERATURE_PRESETS[result][1]
+
+
+def _get_model_specs(model_id: str) -> dict[str, int]:
+    """Get token specs for a model, with sensible defaults if not found."""
+    for key, spec in MODEL_SPECS.items():
+        if key in model_id.lower() or model_id.lower() in key:
+            return spec
+    return {"max_context": 32000, "max_tokens": 16000}
 
 
 def _prompt_api_key(provider: str, lang: str) -> str:
@@ -718,6 +769,14 @@ def config_wizard(config: Config) -> Config:
     if provider:
         model = _select_model(provider, lang)
         config.agents.defaults.model = model
+
+        model_specs = _get_model_specs(model)
+        config.agents.defaults.max_tokens = model_specs["max_tokens"]
+        console.print(f"[dim]✓ {t('step_model_tokens_set', lang, tokens=model_specs['max_tokens'])}[/dim]")
+
+        temperature = _select_temperature(lang)
+        config.agents.defaults.temperature = temperature
+        console.print(f"[dim]✓ {t('step_temperature_set', lang, temp=temperature)}[/dim]")
 
         from banabot.providers.registry import find_by_name
         spec = find_by_name(provider)
