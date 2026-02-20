@@ -198,3 +198,134 @@ print(f'Config: {get_config_path()}')
 - **Corre tests** antes de commit
 - **Formatea con ruff** antes de commit
 - **Actualiza changelog** con cada release
+
+---
+
+## Testing
+
+### Ejecutar Tests
+
+```bash
+# Todos los tests
+pytest
+
+# Tests específicos
+pytest tests/test_commands.py
+
+# Con coverage
+pytest --cov=banabot tests/
+
+# Tests de CLI
+pytest tests/test_cli_input.py tests/test_commands.py -v
+```
+
+### Estructura de Tests
+
+Los tests están en `tests/` y siguen naming conventions:
+
+```
+tests/
+├── test_commands.py        # Tests de CLI commands
+├── test_cli_input.py      # Tests de input interactivo
+├── test_email_channel.py  # Tests de canales
+├── test_tool_validation.py
+└── test_consolidate_offset.py
+```
+
+### Patrones Comunes
+
+#### 1. Testing de CLI con Typer
+
+```python
+from typer.testing import CliRunner
+from banabot.cli.commands import app
+
+runner = CliRunner()
+
+def test_command():
+    result = runner.invoke(app, ["command"], input="input\n")
+    assert result.exit_code == 0
+    assert "expected output" in result.stdout
+```
+
+#### 2. Mocking de paths
+
+```python
+from unittest.mock import patch
+from pathlib import Path
+import shutil
+
+@pytest.fixture
+def mock_paths():
+    with patch("banabot.config.loader.get_config_path") as mock_cp, \
+         patch("banabot.config.loader.save_config") as mock_sc:
+        
+        test_dir = Path("./test_data")
+        if test_dir.exists():
+            shutil.rmtree(test_dir)
+        test_dir.mkdir()
+        
+        mock_cp.return_value = test_dir / "config.json"
+        
+        yield test_dir
+        
+        if test_dir.exists():
+            shutil.rmtree(test_dir)
+```
+
+#### 3. Testing async
+
+```python
+import pytest
+
+@pytest.mark.asyncio
+async def test_async_function():
+    result = await some_async_function()
+    assert result == expected
+```
+
+#### 4. Mocking con patch
+
+```python
+from unittest.mock import patch, MagicMock
+
+def test_with_mock():
+    with patch("module.function") as mock_func:
+        mock_func.return_value = "mocked"
+        # test code
+```
+
+### Crear Nuevos Tests
+
+1. **Nombrar archivo**: `test_<modulo>.py`
+2. **Nombrar funciones**: `test_<descripcion>`
+3. **Usar fixtures** para setup/teardown
+4. **Assert claros** con mensajes descriptivos
+5. **Aislar** cada test (no depende de orden)
+
+### Ejemplo: Test de config_wizard
+
+```python
+import pytest
+from typer.testing import CliRunner
+from banabot.cli.commands import app
+from banabot.config.schema import Config
+
+runner = CliRunner()
+
+def test_model_specs():
+    """Verify MODEL_SPECS contains correct token limits."""
+    from banabot.cli.config_wizard import MODEL_SPECS
+    
+    assert "anthropic/claude-opus-4-5" in MODEL_SPECS
+    assert MODEL_SPECS["anthropic/claude-opus-4-5"]["max_tokens"] == 80000
+
+def test_temperature_presets():
+    """Verify temperature presets are correctly defined."""
+    from banabot.cli.config_wizard import TEMPERATURE_PRESETS
+    
+    assert "creative" in TEMPERATURE_PRESETS
+    assert TEMPERATURE_PRESETS["creative"][1] == 0.8
+    assert TEMPERATURE_PRESETS["balanced"][1] == 0.4
+    assert TEMPERATURE_PRESETS["concise"][1] == 0.2
+```
