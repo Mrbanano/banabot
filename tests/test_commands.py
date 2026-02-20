@@ -17,10 +17,10 @@ runner = CliRunner()
 @pytest.fixture
 def mock_paths():
     """Mock config/workspace paths for test isolation."""
-    with patch("nanobot.config.loader.get_config_path") as mock_cp, \
-         patch("nanobot.config.loader.save_config") as mock_sc, \
-         patch("nanobot.config.loader.load_config") as mock_lc, \
-         patch("nanobot.utils.helpers.get_workspace_path") as mock_ws:
+    with patch("banabot.config.loader.get_config_path") as mock_cp, \
+         patch("banabot.config.loader.save_config") as mock_sc, \
+         patch("banabot.config.loader.load_config") as mock_lc, \
+         patch("banabot.utils.helpers.get_workspace_path") as mock_ws:
 
         base_dir = Path("./test_onboard_data")
         if base_dir.exists():
@@ -44,12 +44,12 @@ def test_onboard_fresh_install(mock_paths):
     """No existing config — should create from scratch."""
     config_file, workspace_dir = mock_paths
 
-    result = runner.invoke(app, ["onboard"])
+    result = runner.invoke(app, ["onboard"], input="n\n")
 
     assert result.exit_code == 0
     assert "Created config" in result.stdout
     assert "Created workspace" in result.stdout
-    assert "nanobot is ready" in result.stdout
+    assert "banabot is ready" in result.stdout
     assert config_file.exists()
     assert (workspace_dir / "AGENTS.md").exists()
     assert (workspace_dir / "memory" / "MEMORY.md").exists()
@@ -60,7 +60,7 @@ def test_onboard_existing_config_refresh(mock_paths):
     config_file, workspace_dir = mock_paths
     config_file.write_text('{"existing": true}')
 
-    result = runner.invoke(app, ["onboard"], input="n\n")
+    result = runner.invoke(app, ["onboard"], input="n\nn\n")
 
     assert result.exit_code == 0
     assert "Config already exists" in result.stdout
@@ -74,7 +74,7 @@ def test_onboard_existing_config_overwrite(mock_paths):
     config_file, workspace_dir = mock_paths
     config_file.write_text('{"existing": true}')
 
-    result = runner.invoke(app, ["onboard"], input="y\n")
+    result = runner.invoke(app, ["onboard"], input="y\nn\n")
 
     assert result.exit_code == 0
     assert "Config already exists" in result.stdout
@@ -88,7 +88,7 @@ def test_onboard_existing_workspace_safe_create(mock_paths):
     workspace_dir.mkdir(parents=True)
     config_file.write_text("{}")
 
-    result = runner.invoke(app, ["onboard"], input="n\n")
+    result = runner.invoke(app, ["onboard"], input="n\nn\n")
 
     assert result.exit_code == 0
     assert "Created workspace" not in result.stdout
