@@ -134,6 +134,70 @@ async def _read_interactive_input_async() -> str:
         raise KeyboardInterrupt from exc
 
 
+def _print_welcome_banner() -> None:
+    """Print the banabot welcome banner with ASCII mascot, responsive to terminal width."""
+    import shutil
+
+    from rich.align import Align
+    from rich.console import Group
+    from rich.panel import Panel
+    from rich.text import Text
+
+    term_w = shutil.get_terminal_size((80, 24)).columns
+
+    # Classic ASCII banana art (Shimrod, alt.ascii-art 1997)
+    banana_lines = [
+        " _",
+        "//\\",
+        "V  \\",
+        " \\  \\_",
+        "  \\,'.`-.",
+        "   |\\ `. `.",
+        "   ( \\  `. `-.                        _,.-:\\",
+        "    \\ \\   `.  `-._             __..--' ,-';/",
+        "     \\ `.   `-.   `-..___..---'   _.--' ,'/",
+        "      `. `.    `-._        __..--'    ,' /",
+        "        `. `-_     ``--..''       _.-' ,'",
+        "          `-_ `-.___        __,--'   ,'",
+        '             `-.__  `----"""    __.-\'',
+        "                `--..____..--'",
+    ]
+    mw = max(len(ln) for ln in banana_lines)
+    # Normalize widths so centering keeps the shape intact
+    mascot = "\n".join(ln.ljust(mw) for ln in banana_lines)
+
+    # Panel needs room for art + padding (2×2) + borders (2)
+    min_panel_w = mw + 6
+    if term_w < min_panel_w + 2:
+        # Terminal too narrow — plain one-liner
+        console.print(
+            f"[bold yellow]banabot[/bold yellow] [dim]v{__version__}[/dim]  [bold]Welcome![/bold]"
+        )
+        return
+
+    panel_w = min(term_w - 2, mw + 10)
+
+    content = Group(
+        Align(Text("banabot", style="bold yellow"), align="center"),
+        Align(Text(f"v{__version__}", style="dim"), align="center"),
+        Align(Text(""), align="center"),
+        Align(Text(mascot), align="center"),
+        Align(Text(""), align="center"),
+        Align(Text("Welcome!", style="bold"), align="center"),
+        Align(Text("Your personal AI assistant", style="dim"), align="center"),
+    )
+
+    panel = Panel(
+        content,
+        border_style="yellow",
+        padding=(1, 2),
+        width=panel_w,
+    )
+
+    console.print(Align(panel, align="center"))
+    console.print()
+
+
 def version_callback(value: bool):
     if value:
         console.print(f"{__logo__} banabot v{__version__}")
@@ -159,6 +223,8 @@ def onboard():
     from banabot.config.loader import get_config_path, load_config, save_config
     from banabot.config.schema import Config
     from banabot.utils.helpers import get_workspace_path
+
+    _print_welcome_banner()
 
     config_path = get_config_path()
 
@@ -530,9 +596,8 @@ def agent(
     else:
         # Interactive mode
         _init_prompt_session()
-        console.print(
-            f"{__logo__} Interactive mode (type [bold]exit[/bold] or [bold]Ctrl+C[/bold] to quit)\n"
-        )
+        _print_welcome_banner()
+        console.print("  Type [bold]exit[/bold] or [bold]Ctrl+C[/bold] to quit\n")
 
         def _exit_on_sigint(signum, frame):
             _restore_terminal()
