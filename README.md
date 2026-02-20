@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="img/banabot-logo.png" alt="banabot" width="420">
+  <img src="https://raw.githubusercontent.com/Mrbanano/banabot/main/img/banabot-logo.png" alt="banabot" width="420">
   <h1>banabot 🍌</h1>
   <p>Lightweight personal AI assistant you can run anywhere — CLI, Telegram, WhatsApp, Discord, and more.</p>
 </div>
