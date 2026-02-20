@@ -1,12 +1,7 @@
 <div align="center">
-  <img src="banabot_logo.png" alt="banabot" width="500">
-  <h1>banabot: Ultra-Lightweight Personal AI Assistant</h1>
-  <p>
-    <a href="https://pypi.org/project/banabot-ai/"><img src="https://img.shields.io/pypi/v/banabot-ai" alt="PyPI"></a>
-    <a href="https://pepy.tech/project/banabot-ai"><img src="https://static.pepy.tech/badge/banabot-ai" alt="Downloads"></a>
-    <img src="https://img.shields.io/badge/python-≥3.11-blue" alt="Python">
-    <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
-  </p>
+  <img src="img/banabot-logo.png" alt="banabot" width="500">
+  <h1>Banabot: Ultra-Lightweight Personal AI Assistant</h1>
+  
 </div>
 
 🍌 **banabot** is an **ultra-lightweight** personal AI assistant — a fork of [nanobot](https://github.com/HKUDS/nanobot)
@@ -1104,23 +1099,3 @@ PRs welcome! The codebase is intentionally small and readable. 🤗
 See [CREDITS.md](./CREDITS.md) for full attribution.
 
 
-## ⭐ Star History
-
-<div align="center">
-  <a href="https://star-history.com/#HKUDS/nanobot&Date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=HKUDS/nanobot&type=Date&theme=dark" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=HKUDS/nanobot&type=Date" />
-      <img alt="Star History Chart (original nanobot)" src="https://api.star-history.com/svg?repos=HKUDS/nanobot&type=Date" style="border-radius: 15px; box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);" />
-    </picture>
-  </a>
-</div>
-
-<p align="center">
-  <em>Thanks for visiting ✨ banabot!</em>
-</p>
-
-
-<p align="center">
-  <sub>banabot is for educational, research, and technical exchange purposes only</sub>
-</p>
