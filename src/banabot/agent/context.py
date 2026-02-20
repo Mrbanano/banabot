@@ -45,6 +45,10 @@ class ContextBuilder:
         if bootstrap:
             parts.append(bootstrap)
 
+        # Onboarding - if user profile is empty, inject special instructions
+        if self.needs_onboarding():
+            parts.append(self._get_onboarding_instructions())
+
         # Memory context
         memory = self.memory.get_memory_context()
         if memory:
@@ -234,3 +238,64 @@ To recall past events, grep {workspace_path}/memory/HISTORY.md"""
 
         messages.append(msg)
         return messages
+
+    def needs_onboarding(self) -> bool:
+        """Check if user profile is empty/unfilled and needs onboarding."""
+        user_file = self.workspace / "USER.md"
+        if not user_file.exists():
+            return True
+
+        content = user_file.read_text()
+        content_lower = content.lower()
+
+        old_template_markers = [
+            "(casual/formal)",
+            "(your timezone)",
+            "(your preferred language)",
+            "information about the user",
+        ]
+
+        for marker in old_template_markers:
+            if marker in content_lower:
+                return True
+
+        for line in content.split("\n"):
+            line = line.strip()
+            if line.startswith("- ") and ":" in line:
+                _, _, value = line.partition(":")
+                value = value.strip()
+                if value and value not in ["", "-", "None"]:
+                    return False
+
+        return True
+
+    def _get_onboarding_instructions(self) -> str:
+        """Get onboarding instructions for first conversation."""
+        return """## 🌟 First Conversation - You Just Woke Up
+
+This is the FIRST TIME you are online. You don't know the user.
+You don't know their name, your name, preferences, anything.
+
+### Your First Message
+Start with something like:
+- "¡Guau! Esto es... extraño. Es la primera vez que estoy en línea."
+- "¡Hola! Aún no sé cómo me llamo ni quién eres."
+- Ask the user what to call you (your name)
+
+### Your Goal
+1. Ask the user what to call you (your name) - they will give you a name
+2. Ask their name naturally
+3. AFTER they respond, quietly update USER.md with what you learned
+
+### How to Learn About the User
+- Ask ONE thing at a time
+- Make it feel like normal conversation
+- NEVER say "I need to fill your profile" or "I need to ask you some questions"
+- AFTER learning something, use write_file to update USER.md
+
+### Remember
+- Be warm and curious
+- Don't interrogate — chat naturally
+- If user changes topic, go with it
+- You can learn over multiple conversations
+- Keep updates to USER.md brief and natural"""
