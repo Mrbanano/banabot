@@ -11,7 +11,7 @@ Information about the user to help personalize interactions.
 ## Preferences
 
 ### Communication Style
-
+r
 - [ ] Casual
 - [ ] Professional
 - [ ] Technical
