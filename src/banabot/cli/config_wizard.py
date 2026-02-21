@@ -4,6 +4,14 @@ Guided flow: language → provider → model → API key → channel → done.
 Uses InquirerPy for arrow-key selection and beautiful prompts.
 Texts are loaded from i18n translation files so adding a new language
 is just creating a JSON file.
+
+DEBT: This file has many `# type: ignore` comments because:
+- InquirerPy's Separator type doesn't match Choice (but works at runtime)
+- Pydantic models use `extra="allow"` for dynamic attrs (pyright doesn't know)
+- Neither opencode nor GLM-5 could figure out how to fix these type hints.
+  If you can, please do! We're all "incapaces" here.
+
+pyright: reportAttributeAccessIssue=false, reportArgumentType=false, reportCallIssue=false
 """
 
 from __future__ import annotations
@@ -245,7 +253,7 @@ def _select_provider(config: Config, lang: str) -> str | None:
             label += " [green]✓[/green]"
         choices.append(Choice(value=name, name=label))
 
-    choices.append(Separator())
+    choices.append(Separator())  # type: ignore[arg-type]
     choices.append(Choice(value="__more__", name=t("step_provider_more", lang)))
 
     result = inquirer.select(
@@ -262,7 +270,7 @@ def _select_provider(config: Config, lang: str) -> str | None:
 def _select_more_providers(config: Config, lang: str) -> str | None:
     """Show all non-popular providers from the schema."""
     choices = [Choice(value="__back__", name=t("back", lang))]
-    choices.append(Separator())
+    choices.append(Separator())  # type: ignore[arg-type]
 
     for name in config.providers.model_fields:
         if name in POPULAR_PROVIDERS:
@@ -289,7 +297,7 @@ def _select_model(provider: str, lang: str) -> str:
 
     models = PROVIDER_MODELS.get(provider, [])
     choices = [Choice(value=model_id, name=label) for model_id, label in models]
-    choices.append(Separator())
+    choices.append(Separator())  # type: ignore[arg-type]
     choices.append(Choice(value="__manual__", name=t("step_model_manual", lang)))
 
     result = inquirer.select(
@@ -375,7 +383,7 @@ def _select_channel(config: Config, lang: str) -> str | None:
             label += " [green]✓[/green]"
         choices.append(Choice(value=name, name=label))
 
-    choices.append(Separator())
+    choices.append(Separator())  # type: ignore[arg-type]
     choices.append(Choice(value="__skip__", name=t("step_channel_skip", lang)))
 
     result = inquirer.select(
@@ -422,7 +430,7 @@ def _configure_telegram(ch_cfg: BaseModel, lang: str) -> None:
         message=t("telegram_token_prompt", lang),
         validate=lambda val: len(val.strip()) > 0,
     ).execute()
-    ch_cfg.token = token.strip().lstrip("-").strip()
+    ch_cfg.token = token.strip().lstrip("-").strip()  # type: ignore[misc]
     console.print(f"[green]{t('telegram_token_success', lang)}[/green]\n")
 
     console.print(f"[dim]{t('telegram_restrict_question', lang)}[/dim]\n")
@@ -435,7 +443,7 @@ def _configure_telegram(ch_cfg: BaseModel, lang: str) -> None:
             message=t("telegram_allow_from_prompt", lang),
             default="",
         ).execute()
-        ch_cfg.allow_from = [x.strip() for x in raw.split(",") if x.strip()]
+        ch_cfg.allow_from = [x.strip() for x in raw.split(",") if x.strip()]  # type: ignore[misc]
 
     console.print(f"[green]{t('telegram_success', lang)}[/green]")
 
@@ -604,7 +612,7 @@ def _advanced_menu(config: Config, lang: str) -> None:
         _section(t("advanced_title", lang))
 
         choices = [Choice(value=key, name=label) for key, label in sections]
-        choices.append(Separator())
+        choices.append(Separator())  # type: ignore[arg-type]
         choices.append(Choice(value=_BACK, name=t("advanced_save", lang)))
 
         result = inquirer.select(
@@ -630,7 +638,7 @@ def _advanced_providers(config: Config, lang: str) -> None:
     """Advanced providers submenu with arrow-key selection."""
     while True:
         choices = [Choice(value=_BACK, name=t("back", lang))]
-        choices.append(Separator())
+        choices.append(Separator())  # type: ignore[arg-type]
 
         for name in config.providers.model_fields:
             prov_cfg = getattr(config.providers, name)
@@ -655,7 +663,7 @@ def _advanced_channels(config: Config, lang: str) -> None:
     """Advanced channels submenu with arrow-key selection."""
     while True:
         choices = [Choice(value=_BACK, name=t("back", lang))]
-        choices.append(Separator())
+        choices.append(Separator())  # type: ignore[arg-type]
 
         for name in config.channels.model_fields:
             ch_cfg = getattr(config.channels, name)
