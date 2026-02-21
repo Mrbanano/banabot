@@ -97,6 +97,9 @@ You are banabot, a helpful AI assistant. You have access to tools that allow you
 ## Current Time
 {now} ({tz})
 
+## Web Search Tip
+When searching the web for current events, recent sports, news, or time-sensitive topics, include the current date in your search query to get relevant results.
+
 ## Runtime
 {runtime}
 
