@@ -177,6 +177,49 @@ class TestSessionPersistence:
         assert len(session.messages) == 0
 
 
+class TestSessionOnboarded:
+    """Test onboarded flag for conversational onboarding."""
+
+    def test_new_session_not_onboarded(self):
+        """New session should have onboarded=False."""
+        session = Session(key="test:new")
+        assert session.onboarded is False
+
+    def test_mark_onboarded_sets_flag(self):
+        """mark_onboarded should set onboarded=True."""
+        session = Session(key="test:mark")
+        assert session.onboarded is False
+
+        session.mark_onboarded()
+        assert session.onboarded is True
+
+    def test_session_with_messages_at_creation_assumes_onboarded(self):
+        """Session created with messages should assume onboarded (loaded from disk)."""
+        # This simulates loading a session from disk that had messages but no onboarded flag
+        session = Session(
+            key="test:messages",
+            messages=[{"role": "user", "content": "hello"}, {"role": "assistant", "content": "hi"}]
+        )
+        assert session.onboarded is True
+
+    def test_onboarded_persists_after_save_load(self, tmp_path):
+        """Onboarded flag should persist after save/load."""
+        from banabot.session.manager import SessionManager
+
+        manager = SessionManager(Path(tmp_path))
+
+        # Create session and mark as onboarded
+        session1 = Session(key="test:persist_onboard")
+        session1.add_message("user", "hello")
+        session1.mark_onboarded()
+        assert session1.onboarded is True
+        manager.save(session1)
+
+        # Load session - should still be onboarded
+        session2 = manager.get_or_create("test:persist_onboard")
+        assert session2.onboarded is True
+
+
 class TestConsolidationTriggerConditions:
     """Test consolidation trigger conditions and logic."""
 
