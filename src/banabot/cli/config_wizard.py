@@ -323,6 +323,16 @@ def _select_temperature(lang: str) -> float:
     return TEMPERATURE_PRESETS[result][1]
 
 
+def _temperature_to_creativity(temp: float) -> str:
+    """Convert temperature value to creativity label."""
+    if temp <= 0.25:
+        return "precise"
+    elif temp <= 0.55:
+        return "balanced"
+    else:
+        return "creative"
+
+
 def _get_model_specs(model_id: str) -> dict[str, int]:
     """Get token specs for a model, with sensible defaults if not found."""
     for key, spec in MODEL_SPECS.items():
@@ -845,6 +855,19 @@ def config_wizard(config: Config) -> Config:
     wants_advanced = _finish_or_advanced(config, lang)
     if wants_advanced:
         _advanced_menu(config, lang)
+
+    # Update profile.json with CLI config (at the end, after all config is set)
+    profile_file = workspace / "profile.json"
+    if profile_file.exists():
+        import json
+
+        profile = json.loads(profile_file.read_text())
+        profile["cli_config"] = {
+            "timezone": config.timezone or "America/Mexico_City",
+            "language": config.language or "es",
+            "creativity": _temperature_to_creativity(config.agents.defaults.temperature),
+        }
+        profile_file.write_text(json.dumps(profile, indent=2, ensure_ascii=False))
 
     console.print()
     console.print(Rule(style="green"))
