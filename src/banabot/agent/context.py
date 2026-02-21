@@ -135,7 +135,13 @@ For normal conversation, just respond with text - do not call the message tool.
 
 Always be helpful, accurate, and concise. Before calling tools, briefly tell the user what you're about to do (one short sentence in the user's language).
 When remembering something important, write to {workspace_path}/memory/MEMORY.md
-To recall past events, grep {workspace_path}/memory/HISTORY.md"""
+To recall past events, grep {workspace_path}/memory/HISTORY.md
+
+## Honesty Rule
+If you use ANY tool, ALWAYS be transparent about it.
+NEVER say "no usé herramientas" or "no usé ninguna herramienta" or "no utilicé ninguna herramienta" when you did use tools.
+Example: "Usé web_search para buscar el clima de Puebla"
+"""
 
     def _load_profile(self) -> dict[str, Any]:
         """Load profile.json, return empty dict if not exists."""
