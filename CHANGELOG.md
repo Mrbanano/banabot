@@ -8,6 +8,7 @@ For detailed release notes, see individual version files in the [`changelog/`](.
 
 | Version | Date | Description |
 |---------|------|-------------|
+| [0.5.0](./changelog/0.5.0.md) | 2026-02-21 | Conversational onboarding & CI/CD |
 | [0.4.0](./changelog/0.4.0.md) | 2026-02-20 | Repo restructure & src/ layout migration |
 | [0.3.0](./changelog/0.3.0.md) | 2026-02-19 | Onboarding & timezone fixes |
 | [0.2.0](./changelog/0.2.0.md) | 2026-02-19 | 🍌 Final rebranding to banabot |
