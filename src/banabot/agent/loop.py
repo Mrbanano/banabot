@@ -342,6 +342,11 @@ class AgentLoop:
 
         needs_onboarding = self.context.needs_onboarding()
         logger.debug(f"Building messages, needs_onboarding={needs_onboarding}")
+
+        system_prompt = self.context.build_system_prompt()
+        if "First Conversation" in system_prompt:
+            logger.debug("Onboarding instructions included in system prompt")
+
         initial_messages = self.context.build_messages(
             history=session.get_history(max_messages=self.memory_window),
             current_message=msg.content,
