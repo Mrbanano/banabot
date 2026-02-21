@@ -81,16 +81,16 @@ class TestOnboardingInstructions:
         cb = ContextBuilder(temp_workspace)
         instructions = cb._get_onboarding_instructions()
 
-        assert "First Conversation" in instructions
-        assert "You Just Woke Up" in instructions
+        assert "FIRST MOMENT" in instructions
+        assert "woke up" in instructions
 
     def test_onboarding_asks_for_name(self, temp_workspace):
-        """Instructions should tell agent to ask for user's name."""
+        """Instructions should tell agent to ask for names."""
         cb = ContextBuilder(temp_workspace)
         instructions = cb._get_onboarding_instructions()
 
-        assert "Ask the user what to call you" in instructions
-        assert "your name" in instructions.lower()
+        assert "what to call YOU" in instructions
+        assert "their name" in instructions
 
     def test_onboarding_uses_profile_tool(self, temp_workspace):
         """Instructions should mention profile tool."""
@@ -107,8 +107,8 @@ class TestOnboardingInstructions:
         cb = ContextBuilder(temp_workspace)
         prompt = cb.build_system_prompt()
 
-        assert "First Conversation" in prompt
-        assert "You Just Woke Up" in prompt
+        assert "FIRST MOMENT" in prompt
+        assert "woke up" in prompt
 
     def test_no_onboarding_in_system_prompt_when_not_needed(self, temp_workspace):
         """System prompt should NOT include onboarding when complete."""
@@ -118,7 +118,7 @@ class TestOnboardingInstructions:
                 {
                     "needs_onboarding": False,
                     "onboarding_step": 3,
-                    "bot_name": "Banana",
+                    "bot_name": "Tito",
                     "user_fields": {"name": "Carlos"},
                 }
             )
@@ -127,7 +127,15 @@ class TestOnboardingInstructions:
         cb = ContextBuilder(temp_workspace)
         prompt = cb.build_system_prompt()
 
-        assert "First Conversation" not in prompt
+        assert "FIRST MOMENT" not in prompt
+
+    def test_neutral_identity_when_onboarding(self, temp_workspace):
+        """Identity should be neutral when onboarding."""
+        cb = ContextBuilder(temp_workspace)
+        prompt = cb.build_system_prompt()
+
+        assert "newborn AI" in prompt
+        assert "don't have a name yet" in prompt
 
 
 class TestUserContext:
