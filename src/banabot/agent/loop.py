@@ -339,6 +339,9 @@ class AgentLoop:
             asyncio.create_task(self._consolidate_memory(session))
 
         self._set_tool_context(msg.channel, msg.chat_id)
+
+        needs_onboarding = self.context.needs_onboarding()
+        logger.debug(f"Building messages, needs_onboarding={needs_onboarding}")
         initial_messages = self.context.build_messages(
             history=session.get_history(max_messages=self.memory_window),
             current_message=msg.content,
@@ -464,7 +467,12 @@ class AgentLoop:
         for m in old_messages:
             if not m.get("content"):
                 continue
-            tools = f" [tools: {', '.join(m['tools_used'])}]" if m.get("tools_used") else ""
+            tools_list = m.get("tools_used")
+            if tools_list:
+                tool_names = [str(t) if isinstance(t, dict) else t for t in tools_list]
+                tools = f" [tools: {', '.join(tool_names)}]"
+            else:
+                tools = ""
             lines.append(
                 f"[{m.get('timestamp', '?')[:16]}] {m['role'].upper()}{tools}: {m['content']}"
             )
@@ -502,7 +510,13 @@ Respond with ONLY valid JSON, no markdown fences."""
                 return
             if text.startswith("```"):
                 text = text.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
-            result = json_repair.loads(text)
+            try:
+                result = json_repair.loads(text)
+            except Exception as e:
+                logger.warning(
+                    f"Memory consolidation: failed to parse JSON response: {e}. Response: {text[:200]}"
+                )
+                return
             if not isinstance(result, dict):
                 logger.warning(
                     f"Memory consolidation: unexpected response type, skipping. Response: {text[:200]}"
