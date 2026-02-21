@@ -272,6 +272,26 @@ def onboard():
                     f.unlink()
             console.print(f"[green]✓[/green] Cleared memory in {memory_dir}")
 
+        skills_dir = workspace / "skills"
+        if skills_dir.exists():
+            import shutil
+
+            shutil.rmtree(skills_dir)
+            skills_dir.mkdir()
+            console.print(f"[green]✓[/green] Cleared skills in {skills_dir}")
+
+        cron_dir = Path.home() / ".banabot" / "cron"
+        if cron_dir.exists():
+            for f in cron_dir.glob("*"):
+                if f.is_file():
+                    f.unlink()
+            console.print(f"[green]✓[/green] Cleared cron jobs in {cron_dir}")
+
+        history_file = Path.home() / ".banabot" / "history" / "cli_history"
+        if history_file.exists():
+            history_file.unlink()
+            console.print("[green]✓[/green] Cleared CLI history")
+
     # Create default bootstrap files
     _create_workspace_templates(workspace, overwrite=overwrite)
 
@@ -377,6 +397,24 @@ This file stores important information that should persist across sessions.
     # Create skills directory for custom user skills
     skills_dir = workspace / "skills"
     skills_dir.mkdir(exist_ok=True)
+
+    # Create profile.json for onboarding state
+    import json
+    from datetime import datetime
+
+    profile_path = workspace / "profile.json"
+    if overwrite or not profile_path.exists():
+        profile_content = {
+            "needs_onboarding": True,
+            "onboarding_step": 0,
+            "bot_name": "",
+            "user_fields": {},
+            "cli_config": {},
+            "created_at": datetime.now().isoformat(),
+        }
+        profile_path.write_text(json.dumps(profile_content, indent=2))
+        action = "Overwrote" if overwrite else "Created"
+        console.print(f"  [dim]{action} profile.json[/dim]")
 
 
 def _make_provider(config: Config):
