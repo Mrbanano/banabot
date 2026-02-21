@@ -8,6 +8,8 @@ is just creating a JSON file.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
@@ -789,6 +791,29 @@ def config_wizard(config: Config) -> Config:
 
     # Step 1b: Timezone
     _select_timezone(config, lang)
+
+    # Update USER.md with language and timezone
+    workspace = Path.home() / ".banabot" / "workspace"
+    user_file = workspace / "USER.md"
+    if user_file.exists():
+        content = user_file.read_text()
+
+        # Update language
+        if "Language:" in content:
+            lang_code = config.language or "es"
+            lang_name = {"es": "Español", "en": "English"}.get(lang_code, lang_code)
+            content = content.replace("- Language:", f"- Language: {lang_name}")
+
+            from banabot.cli.i18n import LANGUAGES
+
+            lang_name_local = LANGUAGES.get(lang_code, {}).get("name", lang_name)
+            content = content.replace(f"- Language: {lang_name}", f"- Language: {lang_name_local}")
+
+            # Update timezone if set
+            if config.timezone:
+                content = content.replace("- Timezone:", f"- Timezone: {config.timezone}")
+
+            user_file.write_text(content)
 
     # Step 2: Provider → Model → API Key
     provider = _select_provider(config, lang)
