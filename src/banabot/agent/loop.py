@@ -345,7 +345,7 @@ class AgentLoop:
             f"Building messages, needs_onboarding={needs_onboarding}, onboarded={session.onboarded}"
         )
 
-        system_prompt = self.context.build_system_prompt()
+        system_prompt = self.context.build_system_prompt(force_onboarding=needs_onboarding)
         if "First Conversation" in system_prompt:
             logger.debug("Onboarding instructions included in system prompt")
 

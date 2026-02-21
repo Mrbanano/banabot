@@ -25,12 +25,13 @@ class ContextBuilder:
         self.memory = MemoryStore(workspace)
         self.skills = SkillsLoader(workspace)
 
-    def build_system_prompt(self, skill_names: list[str] | None = None) -> str:
+    def build_system_prompt(self, skill_names: list[str] | None = None, force_onboarding: bool = False) -> str:
         """
         Build the system prompt from bootstrap files, memory, and skills.
 
         Args:
             skill_names: Optional list of skills to include.
+            force_onboarding: If True, force onboarding instructions to be included.
 
         Returns:
             Complete system prompt.
@@ -45,8 +46,8 @@ class ContextBuilder:
         if bootstrap:
             parts.append(bootstrap)
 
-        # Onboarding - if user profile is empty, inject special instructions
-        if self.needs_onboarding():
+        # Onboarding - either from USER.md check or forced from session
+        if force_onboarding or self.needs_onboarding():
             parts.append(self._get_onboarding_instructions())
 
         # Memory context
