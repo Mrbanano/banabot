@@ -257,6 +257,14 @@ def onboard():
         workspace.mkdir(parents=True, exist_ok=True)
         console.print(f"[green]✓[/green] Created workspace at {workspace}")
 
+    # Clear sessions directory when overwriting
+    if overwrite:
+        sessions_dir = workspace / "sessions"
+        if sessions_dir.exists():
+            for f in sessions_dir.glob("*.jsonl"):
+                f.unlink()
+            console.print(f"[green]✓[/green] Cleared sessions in {sessions_dir}")
+
     # Create default bootstrap files
     _create_workspace_templates(workspace, overwrite=overwrite)
 
