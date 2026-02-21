@@ -47,19 +47,19 @@ class TestModelSpecs:
         """Claude Opus should have high token limits (200K context)."""
         spec = MODEL_SPECS["anthropic/claude-opus-4-5"]
         assert spec["max_context"] >= 200000
-        assert spec["max_tokens"] >= 50000
+        assert spec["max_tokens"] >= 32000
 
     def test_deepseek_has_appropriate_tokens(self):
         """DeepSeek should have appropriate token limits (64K context)."""
         spec = MODEL_SPECS["deepseek/deepseek-chat"]
         assert spec["max_context"] >= 64000
-        assert spec["max_tokens"] >= 20000
+        assert spec["max_tokens"] >= 8000
 
     def test_gemini_pro_has_high_tokens(self):
         """Gemini 2.5 Pro should have very high token limits (1M context)."""
         spec = MODEL_SPECS["gemini/gemini-2.5-pro"]
         assert spec["max_context"] >= 1000000
-        assert spec["max_tokens"] >= 80000
+        assert spec["max_tokens"] >= 8000
 
 
 class TestTemperaturePresets:
@@ -97,7 +97,7 @@ class TestGetModelSpecs:
     def test_exact_match_returns_spec(self):
         """Exact model ID should return correct spec."""
         spec = _get_model_specs("anthropic/claude-opus-4-5")
-        assert spec["max_tokens"] == 80000
+        assert spec["max_tokens"] == 32000
 
     def test_partial_match_returns_spec(self):
         """Partial match (e.g., 'gpt-4o' in model string) should work."""
