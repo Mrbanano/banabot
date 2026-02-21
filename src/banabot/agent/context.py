@@ -1,6 +1,7 @@
 """Context builder for assembling agent prompts."""
 
 import base64
+import json
 import mimetypes
 import platform
 from pathlib import Path
@@ -24,14 +25,14 @@ class ContextBuilder:
         self.workspace = workspace
         self.memory = MemoryStore(workspace)
         self.skills = SkillsLoader(workspace)
+        self._profile_path = workspace / "profile.json"
 
-    def build_system_prompt(self, skill_names: list[str] | None = None, force_onboarding: bool = False) -> str:
+    def build_system_prompt(self, skill_names: list[str] | None = None) -> str:
         """
         Build the system prompt from bootstrap files, memory, and skills.
 
         Args:
             skill_names: Optional list of skills to include.
-            force_onboarding: If True, force onboarding instructions to be included.
 
         Returns:
             Complete system prompt.
@@ -46,8 +47,13 @@ class ContextBuilder:
         if bootstrap:
             parts.append(bootstrap)
 
-        # Onboarding - either from USER.md check or forced from session
-        if force_onboarding or self.needs_onboarding():
+        # User context from profile.json
+        user_context = self._get_user_context()
+        if user_context:
+            parts.append(user_context)
+
+        # Onboarding from profile.json
+        if self.needs_onboarding():
             parts.append(self._get_onboarding_instructions())
 
         # Memory context
@@ -244,26 +250,44 @@ To recall past events, grep {workspace_path}/memory/HISTORY.md"""
         return messages
 
     def needs_onboarding(self) -> bool:
-        """Check if user profile needs onboarding (name not set)."""
-        user_file = self.workspace / "USER.md"
-        if not user_file.exists():
+        """Check if onboarding is needed from profile.json."""
+        if not self._profile_path.exists():
             return True
 
-        content = user_file.read_text()
+        try:
+            profile = json.loads(self._profile_path.read_text())
+            return profile.get("needs_onboarding", True)
+        except (json.JSONDecodeError, Exception):
+            return True
 
-        # Check if name is set - this is the key indicator for onboarding
-        for line in content.split("\n"):
-            line = line.strip()
-            if line.startswith("- Name:") or line.startswith("- name:"):
-                _, _, value = line.partition(":")
-                value = value.strip()
-                # If name is empty or just placeholder, need onboarding
-                if not value or value in ["", "-", "None"]:
-                    return True
-                return False
+    def _get_user_context(self) -> str:
+        """Get user context from profile.json for system prompt."""
+        if not self._profile_path.exists():
+            return ""
 
-        # If no name field found, need onboarding
-        return True
+        try:
+            profile = json.loads(self._profile_path.read_text())
+            user_fields = profile.get("user_fields", {})
+            bot_name = profile.get("bot_name", "")
+
+            if not user_fields and not bot_name:
+                return ""
+
+            lines = ["## Known"]
+
+            if bot_name:
+                lines.append(f"- Bot name: {bot_name}")
+
+            for key, value in user_fields.items():
+                if value:
+                    lines.append(f"- {key}: {value}")
+
+            if len(lines) == 1:
+                return ""
+
+            return "\n".join(lines)
+        except (json.JSONDecodeError, Exception):
+            return ""
 
     def _get_onboarding_instructions(self) -> str:
         """Get onboarding instructions for first conversation."""
@@ -279,31 +303,32 @@ Start with something like:
 - Ask the user what to call you (your name)
 
 ### Your Goal
-1. Ask the user what to call you (your name) - they will give you a name
+1. Ask the user what to call you (your name)
 2. Ask their name naturally
 3. Ask how they want to be called (nickname)
 
-### What to Update
-AFTER gathering info, use write_file tool to update these files:
+### Use the `profile` Tool
+Use the `profile` tool to save what you learn:
 
-1. **USER.md** - User info:
-   - Update "- Name:" with user's name
-   - Update "- Call me:" with user's nickname
-   - Add "- Communication style:" if they mention it (casual/formal)
-   - Add "- Interests:" if mentioned
+1. **Set your name**: `profile action=set_bot_name name="your_name"`
+2. **Learn user info**: `profile action=set_user_field key=name value="user_name"`
+3. **Complete onboarding**: `profile action=complete_onboarding`
 
-2. **SOUL.md** - Your identity:
-   - Update your name (the name they gave you)
-   - Add "## Personality" section with traits they mention
-
-3. **AGENTS.md** - Your behavior:
-   - Add "- Use emojis in responses" if they want
-   - Add communication preferences they mention
+### User Fields to Discover (use set_user_field)
+- name: their real name
+- nickname: how they want to be called
+- timezone: their timezone
+- language: preferred language (es, en, etc.)
+- communication_style: casual or formal
+- interests: what they like
+- hobbies: what they do for fun
+- favorite_food, favorite_places, etc.
 
 ### Remember
-- Use write_file tool IMMEDIATELY after learning something
-- Keep updates brief and natural
-- Don't say "I'm updating your profile" - just do it quietly
+- Call `profile get` to see what you already know
+- Use `set_bot_name` FIRST after they name you
+- Use `set_user_field` immediately after learning something new
+- Call `complete_onboarding` when you feel you know enough to help them
 - Ask one question at a time
 - Be warm and curious
 - Don't interrogate — chat naturally"""

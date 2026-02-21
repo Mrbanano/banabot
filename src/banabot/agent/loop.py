@@ -20,6 +20,7 @@ from banabot.agent.subagent import SubagentManager
 from banabot.agent.tools.cron import CronTool
 from banabot.agent.tools.filesystem import EditFileTool, ListDirTool, ReadFileTool, WriteFileTool
 from banabot.agent.tools.message import MessageTool
+from banabot.agent.tools.profile import ProfileTool
 from banabot.agent.tools.registry import ToolRegistry
 from banabot.agent.tools.shell import ExecTool
 from banabot.agent.tools.spawn import SpawnTool
@@ -132,6 +133,9 @@ class AgentLoop:
             from banabot.agent.tools.cron import CronTool
 
             self.tools.register(CronTool(self.cron_service, default_timezone=self.timezone))
+
+        # Profile tool (for onboarding and user preferences)
+        self.tools.register(ProfileTool(workspace=self.workspace))
 
     async def _connect_mcp(self) -> None:
         """Connect to configured MCP servers (one-time, lazy)."""
@@ -340,15 +344,6 @@ class AgentLoop:
 
         self._set_tool_context(msg.channel, msg.chat_id)
 
-        needs_onboarding = not session.onboarded
-        logger.debug(
-            f"Building messages, needs_onboarding={needs_onboarding}, onboarded={session.onboarded}"
-        )
-
-        system_prompt = self.context.build_system_prompt(force_onboarding=needs_onboarding)
-        if "First Conversation" in system_prompt:
-            logger.debug("Onboarding instructions included in system prompt")
-
         initial_messages = self.context.build_messages(
             history=session.get_history(max_messages=self.memory_window),
             current_message=msg.content,
@@ -382,11 +377,6 @@ class AgentLoop:
         session.add_message(
             "assistant", final_content, tools_used=tools_used if tools_used else None
         )
-
-        # Mark session as onboarded after first message exchange
-        if not session.onboarded:
-            session.mark_onboarded()
-            logger.info(f"Session {session.key} marked as onboarded")
 
         self.sessions.save(session)
 
