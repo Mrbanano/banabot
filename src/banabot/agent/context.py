@@ -243,33 +243,25 @@ To recall past events, grep {workspace_path}/memory/HISTORY.md"""
         return messages
 
     def needs_onboarding(self) -> bool:
-        """Check if user profile is empty/unfilled and needs onboarding."""
+        """Check if user profile needs onboarding (name not set)."""
         user_file = self.workspace / "USER.md"
         if not user_file.exists():
             return True
 
         content = user_file.read_text()
-        content_lower = content.lower()
 
-        old_template_markers = [
-            "(casual/formal)",
-            "(your timezone)",
-            "(your preferred language)",
-            "information about the user",
-        ]
-
-        for marker in old_template_markers:
-            if marker in content_lower:
-                return True
-
+        # Check if name is set - this is the key indicator for onboarding
         for line in content.split("\n"):
             line = line.strip()
-            if line.startswith("- ") and ":" in line:
+            if line.startswith("- Name:") or line.startswith("- name:"):
                 _, _, value = line.partition(":")
                 value = value.strip()
-                if value and value not in ["", "-", "None"]:
-                    return False
+                # If name is empty or just placeholder, need onboarding
+                if not value or value in ["", "-", "None"]:
+                    return True
+                return False
 
+        # If no name field found, need onboarding
         return True
 
     def _get_onboarding_instructions(self) -> str:
