@@ -801,13 +801,8 @@ def config_wizard(config: Config) -> Config:
         # Update language
         if "Language:" in content:
             lang_code = config.language or "es"
-            lang_name = {"es": "Español", "en": "English"}.get(lang_code, lang_code)
-            content = content.replace("- Language:", f"- Language: {lang_name}")
-
-            from banabot.cli.i18n import LANGUAGES
-
-            lang_name_local = LANGUAGES.get(lang_code, {}).get("name", lang_name)
-            content = content.replace(f"- Language: {lang_name}", f"- Language: {lang_name_local}")
+            lang_label = LANGUAGES.get(lang_code, lang_code)
+            content = content.replace("- Language:", f"- Language: {lang_label}")
 
             # Update timezone if set
             if config.timezone:
