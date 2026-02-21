@@ -341,7 +341,9 @@ class AgentLoop:
         self._set_tool_context(msg.channel, msg.chat_id)
 
         needs_onboarding = not session.onboarded
-        logger.debug(f"Building messages, needs_onboarding={needs_onboarding}, onboarded={session.onboarded}")
+        logger.debug(
+            f"Building messages, needs_onboarding={needs_onboarding}, onboarded={session.onboarded}"
+        )
 
         system_prompt = self.context.build_system_prompt()
         if "First Conversation" in system_prompt:
