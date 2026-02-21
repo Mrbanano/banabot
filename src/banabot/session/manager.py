@@ -30,6 +30,24 @@ class Session:
     metadata: dict[str, Any] = field(default_factory=dict)
     last_consolidated: int = 0  # Number of messages already consolidated to files
 
+    def __post_init__(self):
+        # If metadata exists from load, preserve onboarded status
+        # Otherwise default to False for new sessions
+        if self.metadata is None:
+            self.metadata = {}
+        # If session has messages but no onboarded flag, assume already onboarded
+        if "onboarded" not in self.metadata and self.messages:
+            self.metadata["onboarded"] = True
+
+    @property
+    def onboarded(self) -> bool:
+        """Check if this session has completed onboarding."""
+        return self.metadata.get("onboarded", False)
+
+    def mark_onboarded(self) -> None:
+        """Mark this session as onboarded (first conversation done)."""
+        self.metadata["onboarded"] = True
+
     def add_message(self, role: str, content: str, **kwargs: Any) -> None:
         """Add a message to the session."""
         msg = {"role": role, "content": content, "timestamp": datetime.now().isoformat(), **kwargs}

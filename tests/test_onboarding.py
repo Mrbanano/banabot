@@ -21,32 +21,15 @@ def temp_workspace():
 
 
 class TestOnboardingDetection:
-    """Tests for onboarding detection mechanism."""
+    """Tests for onboarding detection mechanism (based on Name field in USER.md)."""
 
     def test_needs_onboarding_empty_user_file(self, temp_workspace):
         """Should return True when USER.md doesn't exist."""
         cb = ContextBuilder(temp_workspace)
         assert cb.needs_onboarding() is True
 
-    def test_needs_onboarding_with_template_markers(self, temp_workspace):
-        """Should return True when USER.md has old template markers."""
-        user_file = temp_workspace / "USER.md"
-        user_file.write_text("""# User
-
-Information about the user goes here.
-
-## Preferences
-
-- Communication style: (casual/formal)
-- Timezone: (your timezone)
-- Language: (your preferred language)
-""")
-
-        cb = ContextBuilder(temp_workspace)
-        assert cb.needs_onboarding() is True
-
-    def test_needs_onboarding_with_new_template(self, temp_workspace):
-        """Should return True when USER.md has new template (empty fields)."""
+    def test_needs_onboarding_with_empty_name(self, temp_workspace):
+        """Should return True when USER.md exists but Name is empty."""
         user_file = temp_workspace / "USER.md"
         user_file.write_text("""# User Profile
 
@@ -58,20 +41,13 @@ Information about the user goes here.
 ## Preferences
 - Timezone:
 - Language:
-- Communication style:
-- Technical level:
-
-## Background
-- Interests:
-- Currently working on:
-- Notes:
 """)
 
         cb = ContextBuilder(temp_workspace)
         assert cb.needs_onboarding() is True
 
-    def test_needs_onboarding_false_when_filled(self, temp_workspace):
-        """Should return False when USER.md has actual user data."""
+    def test_needs_onboarding_with_name_set(self, temp_workspace):
+        """Should return False when USER.md has actual user name."""
         user_file = temp_workspace / "USER.md"
         user_file.write_text("""# User Profile
 
@@ -83,13 +59,6 @@ Information about the user goes here.
 ## Preferences
 - Timezone: America/Mexico_City
 - Language: es
-- Communication style: casual
-- Technical level: intermediate
-
-## Background
-- Interests: programming
-- Currently working on: automation
-- Notes: Test user
 """)
 
         cb = ContextBuilder(temp_workspace)
