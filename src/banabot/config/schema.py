@@ -185,6 +185,31 @@ class ChannelsConfig(Base):
     qq: QQConfig = Field(default_factory=QQConfig)
 
 
+class SemanticMemoryConfig(Base):
+    """Semantic memory configuration (optional, requires fastembed + usearch)."""
+
+    enabled: bool = False
+    model: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    dimensions: int = 384
+    min_score: float = 0.3
+    max_recall: int = 5
+    cleanup_interval_hours: int = 24
+    history_max_lines: int = 500
+    session_trim_keep: int = 50
+
+    episodic_ttl_days: int = 30
+    summary_ttl_days: int = 90
+    fact_ttl_days: int = 180
+    user_profile_ttl_days: int | None = None
+
+    citations_enabled: bool = True
+    query_expansion: bool = False
+    mmr_enabled: bool = False
+    mmr_lambda: float = 0.7
+    temporal_decay_enabled: bool = False
+    temporal_decay_half_life_days: int = 30
+
+
 class AgentDefaults(Base):
     """Default agent configuration."""
 
@@ -194,6 +219,7 @@ class AgentDefaults(Base):
     temperature: float = 0.7
     max_tool_iterations: int = 20
     memory_window: int = 25
+    semantic_memory: SemanticMemoryConfig = Field(default_factory=SemanticMemoryConfig)
 
 
 class AgentsConfig(Base):

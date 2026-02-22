@@ -565,6 +565,7 @@ def gateway(
         session_manager=session_manager,
         mcp_servers=config.tools.mcp_servers,
         timezone=config.timezone,
+        semantic_memory_config=config.agents.defaults.semantic_memory,
     )
 
     # Set cron callback (needs agent)
@@ -1120,6 +1121,40 @@ def status():
                 console.print(
                     f"{spec.label}: {'[green]✓[/green]' if has_key else '[dim]not set[/dim]'}"
                 )
+
+
+@app.command()
+def memory():
+    """Show memory status."""
+    from banabot.config.loader import load_config
+
+    config = load_config()
+    workspace = config.workspace_path
+
+    console.print(f"{__logo__} Memory Status\n")
+
+    sem_config = config.agents.defaults.semantic_memory
+    console.print(
+        f"Semantic Memory: {'[green]enabled[/green]' if sem_config.enabled else '[dim]disabled[/dim]'}"
+    )
+
+    if sem_config.enabled:
+        from banabot.agent.semantic_memory import SemanticMemoryStore
+
+        store = SemanticMemoryStore(workspace, sem_config)
+        stats = store.stats()
+
+        console.print("\n[bold]Memory by type:[/bold]")
+        for mem_type, count in stats.items():
+            console.print(f"  {mem_type:15s}: {count}")
+
+        memory_dir = workspace / "memory"
+        if memory_dir.exists():
+            md_files = list(memory_dir.glob("*.md"))
+            if md_files:
+                console.print("\n[bold]Memory files:[/bold]")
+                for f in sorted(md_files)[-10:]:
+                    console.print(f"  {f.name}")
 
 
 # ============================================================================
