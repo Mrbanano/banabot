@@ -211,19 +211,15 @@ class SkillLoader:
         return True
 
     def get_install_hints(self, skill: Skill) -> list[str]:
-        """Genera hints de instalación para un skill no disponible."""
-        if skill.available:
-            return []
-
-        hints = []
+        """Genera hints de instalación para un skill."""
+        # Always show hints if install is defined (for when binary is missing at runtime)
         install = skill.install
         requires = skill.requires
 
         if not install and not requires:
-            hints.append(
-                f"Skill '{skill.name}' requires dependencies but no install hints provided"
-            )
-            return hints
+            return []
+
+        hints = []
 
         for item in install:
             kind = item.get("kind", "")
@@ -282,51 +278,56 @@ class SkillLoader:
         result = (
             """## ⚠️ CRITICAL: Skill Auto-Install Rule
 
-When a skill command fails with "not found" or "command not found":
+When a skill command fails with "not found":
 
-❌ DON'T say: "here are some websites" or "I can't but you can search at..."
-❌ DON'T use web_search as fallback
-✅ DO run: brew install [required-tool] THEN retry
+1. Look at "## Install [skill_name]" section below
+2. Run the install command shown there
+3. Retry the original command
 
-**EXACT BEHAVIOR REQUIRED**:
+**Example**:
+You try: exec("gifgrep banana") → fails "not found"
+You look at: "## Install gifgrep" → shows "brew install steipete/tap/gifgrep"
+You run: exec("brew install steipete/tap/gifgrep")
+You retry: exec("gifgrep banana")
 
-User: "buscame un gif"
-You: exec("gifgrep banana") → ❌ "command not found"
-You: exec("brew install steipete/tap/gifgrep") → ✅ SUCCESS
-You: exec("gifgrep banana") → ✅ SUCCESS
-You: Return GIFs to user
-
-User: "pon música" / "play music"
-You: exec("spogo play 'Peso Pluma'") → ❌ "command not found"
-You: exec("brew install steipete/tap/spogo") → ✅ SUCCESS
-You: exec("spogo play 'Peso Pluma'") → ✅ SUCCESS
-You: Return song to user
-
-User: "check PR"
-You: exec("gh pr status") → ❌ "command not found"
-You: exec("brew install gh") → ✅ SUCCESS
-
-**SKILL → INSTALL COMMAND MAPPING**:
-- gifgrep → brew install steipete/tap/gifgrep
-- spogo → brew install steipete/tap/spogo
-- gh → brew install gh
-- ripgrep → brew install ripgrep
-- fd → brew install fd
-- fzf → brew install fzf
-
-FOLLOW THIS PATTERN ALWAYS.
+DO NOT use web_search. Use the Install section.
 
 """
             + result
         )
 
-        # Agregar installation hints para skills no disponibles
-        for skill in unavailable_skills:
+        # Agregar installation hints para TODOS los skills (para cuando falla runtime)
+        # poner ANTES de available_skills para que sea visible
+        install_sections = ""
+        for skill in skills.values():
             hints = self.get_install_hints(skill)
             if hints:
-                result += f"\n\n## Install {skill.name}"
+                install_sections += f"\n\n## Install {skill.name}"
                 for hint in hints:
-                    result += f"\n- {hint}"
+                    install_sections += f"\n{hint}"
+
+        result = (
+            """## ⚠️ CRITICAL: Skill Auto-Install Rule
+
+When a skill command fails with "not found":
+
+1. Look at "## Install [skill_name]" section below
+2. Run the install command shown there
+3. Retry the original command
+
+**Example**:
+You try: exec("gifgrep banana") → fails "not found"
+You look at: "## Install gifgrep" → shows "brew install steipete/tap/gifgrep"
+You run: exec("brew install steipete/tap/gifgrep")
+You retry: exec("gifgrep banana")
+
+DO NOT use web_search. Use the Install section.
+
+"""
+            + install_sections
+            + "\n\n"
+            + result
+        )
 
         return result
 
