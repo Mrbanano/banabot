@@ -538,7 +538,11 @@ Respond with ONLY valid JSON, no markdown fences."""
             elif isinstance(raw_content, str):
                 text = raw_content.strip()
             else:
-                text = str(raw_content)
+                text = (
+                    json.dumps(raw_content)
+                    if isinstance(raw_content, (dict, list))
+                    else str(raw_content)
+                )
             if not text:
                 logger.warning("Memory consolidation: LLM returned empty response, skipping")
                 return
@@ -558,10 +562,10 @@ Respond with ONLY valid JSON, no markdown fences."""
                 return
 
             if entry := result.get("history_entry"):
-                memory.append_history(entry)
+                memory.append_history(str(entry))
             if update := result.get("memory_update"):
-                if update != current_memory:
-                    memory.write_long_term(update)
+                if str(update) != current_memory:
+                    memory.write_long_term(str(update))
 
             if archive_all:
                 session.last_consolidated = 0
