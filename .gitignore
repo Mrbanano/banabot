@@ -28,3 +28,7 @@ docs/issues/*
 
 .claude
 .ruff_cache
+
+openclaw/*
+
+docs/*
