@@ -258,16 +258,32 @@ I am {bot_name}, a lightweight AI assistant.
 
             if key in append_fields and value:
                 existing = user_fields.get(key, "")
+                # Normalize existing to list
                 if existing:
-                    # Append, avoiding duplicates
-                    existing_list = [x.strip() for x in existing.split(",")]
-                    value_clean = value.strip()
-                    if value_clean not in existing_list:
-                        user_fields[key] = f"{existing}, {value_clean}"
-                    else:
-                        return f"Already known: {key} = {existing}"
+                    existing_list = [x.strip().lower() for x in existing.split(",")]
                 else:
-                    user_fields[key] = value
+                    existing_list = []
+
+                # Normalize new value to list (handle comma-separated values)
+                new_items = [x.strip() for x in value.split(",")]
+
+                # Add only new items that aren't already in existing
+                added = []
+                for item in new_items:
+                    if item and item.lower() not in existing_list:
+                        existing_list.append(item.lower())
+                        added.append(item.strip())
+                        # Add to existing (for next iteration)
+                        if not existing:
+                            existing = item.strip()
+                        else:
+                            existing = f"{existing}, {item.strip()}"
+
+                if added:
+                    user_fields[key] = existing
+                    return f"Learned: {key} = {added}"
+                else:
+                    return f"Already known: {key} = {value}"
             else:
                 # Replace for single-value fields
                 user_fields[key] = value
