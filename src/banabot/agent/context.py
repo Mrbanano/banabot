@@ -68,11 +68,26 @@ class ContextBuilder:
         if memory:
             parts.append(f"# Memory\n\n{memory}")
 
-        # Skills v2 (XML format with skill_router tool)
+        # Skills v2 (XML format) - PONER AL INICIO para que el agente las vea
         if self.v2_skill_loader:
             v2_skills = self.v2_skill_loader.format_for_prompt()
             if v2_skills:
-                parts.append(v2_skills)
+                # Add a VERY prominent header with simple rules
+                skills_with_header = f"""# 🚨 IMPORTANT - USE SKILLS FIRST 🚨
+
+If user asks for GIFs → use gifgrep
+If gifgrep fails → RUN: brew install steipete/tap/gifgrep
+
+If user asks for weather → use weather tool
+
+If user asks for GitHub/PR → use gh CLI
+
+If skill not installed → install it first, then use
+
+{v2_skills}
+
+---"""
+                parts.insert(0, skills_with_header)  # Insert at beginning
         else:
             # Legacy skills format
             # Skills - progressive loading
