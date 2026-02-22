@@ -137,6 +137,11 @@ class AgentLoop:
         # Profile tool (for onboarding and user preferences)
         self.tools.register(ProfileTool(workspace=self.workspace))
 
+        # Message classifier for auto-learning
+        from banabot.agent.tools.classify import ClassifyMessageTool
+
+        self.tools.register(ClassifyMessageTool())
+
     async def _connect_mcp(self) -> None:
         """Connect to configured MCP servers (one-time, lazy)."""
         if self._mcp_connected or not self._mcp_servers:

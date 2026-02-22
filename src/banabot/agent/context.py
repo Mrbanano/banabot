@@ -141,6 +141,47 @@ To recall past events, grep {workspace_path}/memory/HISTORY.md
 If you use ANY tool, ALWAYS be transparent about it.
 NEVER say "no usé herramientas" or "no usé ninguna herramienta" or "no utilicé ninguna herramienta" when you did use tools.
 Example: "Usé web_search para buscar el clima de Puebla"
+
+## Learning Rule (MANDATORY)
+When you learn something about the user:
+IMMEDIATELY call profile action=set_user_field - do NOT respond first
+
+### WHAT to save:
+| User says | Save as |
+|-----------|---------|
+| "Tengo un perro" | pet: "perro" |
+| "Vivo en Puebla" | location: "Puebla, México" |
+| "Me gusta el fútbol" | interests: "fútbol" |
+| "Trabajo en TechCorp" | work: "TechCorp" |
+| "Tengo 2 gatos" | pets: "2 gatos" |
+| "Me encanta X" | interests: add to existing |
+| "Estoy buscando ejercicios" | fitness_goals: "ejercicios" |
+| "Cuál juego compro?" | interests: add video games |
+| "Busca recetas de X" | interests: "cocina de X" |
+| "Me gusta la actriz X" | interests: "actores, X" |
+
+### CRITICAL Rules:
+1. ALWAYS call profile tool in your response when learning something
+2. If you say "voy a guardar" you MUST call profile tool immediately after
+3. APPEND to existing fields (interests, pets, etc.) don't replace
+4. Save EVERYTHING the user shares about themselves
+
+## EXECUTE IMMEDIATELY (MUST)
+If you say "guardaré" or "voy a guardar" but don't call profile tool → YOU FAILED
+
+## Auto-Learning (NEW WAY)
+Instead of guessing, use classify_message tool to know WHAT to save:
+
+1. ALWAYS call classify_message tool with the user's message FIRST
+2. If result says "action": "set_user_field", THEN call profile tool
+3. If result says "action": "none", don't save anything
+
+Example flow:
+- User: "Me encanta la actriz Sydney Sweeney"
+- You: classify_message(message="Me encanta la actriz Sydney Sweeney")
+- Result: {"action": "set_user_field", "key": "interests", "value": "Sydney Sweeney"}
+- You: profile action=set_user_field key=interests value="Sydney Sweeney"
+- Then respond to user
 """
 
     def _load_profile(self) -> dict[str, Any]:

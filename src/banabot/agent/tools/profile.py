@@ -244,13 +244,40 @@ I am {bot_name}, a lightweight AI assistant.
             if not key:
                 return "Error: key is required for set_user_field"
 
-            profile.setdefault("user_fields", {})[key] = value
+            user_fields = profile.setdefault("user_fields", {})
+
+            # Fields that should APPEND (not replace)
+            append_fields = {
+                "interests",
+                "pets",
+                "allergies",
+                "goals",
+                "search_interest",
+                "recommendation",
+            }
+
+            if key in append_fields and value:
+                existing = user_fields.get(key, "")
+                if existing:
+                    # Append, avoiding duplicates
+                    existing_list = [x.strip() for x in existing.split(",")]
+                    value_clean = value.strip()
+                    if value_clean not in existing_list:
+                        user_fields[key] = f"{existing}, {value_clean}"
+                    else:
+                        return f"Already known: {key} = {existing}"
+                else:
+                    user_fields[key] = value
+            else:
+                # Replace for single-value fields
+                user_fields[key] = value
+
             profile["onboarding_step"] = self._calculate_step(profile)
             self._save_profile(profile)
             self._update_user_md(profile["user_fields"])
 
             if value:
-                return f"Learned: {key} = {value}"
+                return f"Learned: {key} = {user_fields[key]}"
             else:
                 return f"Cleared: {key}"
 
