@@ -52,7 +52,7 @@ class AgentLoop:
         max_iterations: int = 20,
         temperature: float = 0.7,
         max_tokens: int = 4096,
-        memory_window: int = 50,
+        memory_window: int = 25,
         web_search_config: "WebSearchConfig | None" = None,
         exec_config: "ExecToolConfig | None" = None,
         cron_service: "CronService | None" = None,
@@ -137,10 +137,20 @@ class AgentLoop:
         # Profile tool (for onboarding and user preferences)
         self.tools.register(ProfileTool(workspace=self.workspace))
 
-        # Message classifier for auto-learning
-        from banabot.agent.tools.classify import ClassifyMessageTool
-
-        self.tools.register(ClassifyMessageTool())
+        # Message classifier for auto-learning - DISABLED TEMPORARILY
+        # Problem: The LLM doesn't use classify_message correctly - it tries to use
+        # the JSON output as a format string, causing errors like:
+        # "Invalid format specifier ' "set_user_field", "key": "interests"...'"
+        #
+        # Solution: Rely on prompt-based learning rules instead.
+        # The profile tool now has APPEND behavior which works correctly.
+        #
+        # TODO: Re-implement with a different approach:
+        # - Option A: Post-process messages after agent response, extract interests
+        # - Option B: Use a system subagent that analyzes conversation
+        # - Option C: Improve prompt to make LLM call classify_message FIRST
+        # from banabot.agent.tools.classify import ClassifyMessageTool
+        # self.tools.register(ClassifyMessageTool())
 
     async def _connect_mcp(self) -> None:
         """Connect to configured MCP servers (one-time, lazy)."""
@@ -512,7 +522,18 @@ Respond with ONLY valid JSON, no markdown fences."""
                 ],
                 model=self.model,
             )
-            text = (response.content or "").strip()
+            raw_content = response.content
+            # Handle different content formats
+            if raw_content is None:
+                text = ""
+            elif isinstance(raw_content, dict):
+                text = json.dumps(raw_content)
+            elif isinstance(raw_content, list):
+                text = json.dumps(raw_content)
+            elif isinstance(raw_content, str):
+                text = raw_content.strip()
+            else:
+                text = str(raw_content)
             if not text:
                 logger.warning("Memory consolidation: LLM returned empty response, skipping")
                 return

@@ -168,20 +168,6 @@ IMMEDIATELY call profile action=set_user_field - do NOT respond first
 
 ## EXECUTE IMMEDIATELY (MUST)
 If you say "guardaré" or "voy a guardar" but don't call profile tool → YOU FAILED
-
-## Auto-Learning (NEW WAY)
-Instead of guessing, use classify_message tool to know WHAT to save:
-
-1. ALWAYS call classify_message tool with the user's message FIRST
-2. If result says "action": "set_user_field", THEN call profile tool
-3. If result says "action": "none", don't save anything
-
-Example flow:
-- User: "Me encanta la actriz Sydney Sweeney"
-- You: classify_message(message="Me encanta la actriz Sydney Sweeney")
-- Result: {"action": "set_user_field", "key": "interests", "value": "Sydney Sweeney"}
-- You: profile action=set_user_field key=interests value="Sydney Sweeney"
-- Then respond to user
 """
 
     def _load_profile(self) -> dict[str, Any]:
