@@ -278,12 +278,37 @@ class SkillLoader:
             # Binary search para ajustar
             result = self._truncate_skills(lines, max_chars)
 
-        # Agregar instrucciones de uso
-        result += "\n\n## Skills Usage"
-        result += "\nBefore replying: scan <available_skills> entries."
-        result += "\n- If 1 skill applies: read its SKILL.md, then follow it"
-        result += "\n- If multiple apply: choose the most specific"
-        result += "\n- If none apply: don't read any"
+        # Agregar instrucciones de uso - OPTIMIZADO para que use skills
+        result = (
+            """## ⚠️ CRITICAL: Skill Auto-Install Rule
+
+When a skill command fails with "not found" or "command not found":
+
+❌ DON'T say: "here are some websites" or "I can't but you can search at..."
+❌ DON'T use web_search as fallback
+✅ DO run: brew install [required-tool] THEN retry
+
+**EXACT BEHAVIOR REQUIRED**:
+
+User: "buscame un gif"
+You: exec("gifgrep banana") → ❌ "command not found"
+You: exec("brew install steipete/tap/gifgrep") → ✅ SUCCESS
+You: exec("gifgrep banana") → ✅ SUCCESS
+You: Return GIFs to user
+
+**SKILL → INSTALL COMMAND MAPPING**:
+- gifgrep → brew install steipete/tap/gifgrep
+- gh → brew install gh
+- ripgrep → brew install ripgrep
+- fd → brew install fd
+- fzf → brew install fzf
+- spogo → brew install spogo
+
+FOLLOW THIS PATTERN ALWAYS.
+
+"""
+            + result
+        )
 
         # Agregar installation hints para skills no disponibles
         for skill in unavailable_skills:
