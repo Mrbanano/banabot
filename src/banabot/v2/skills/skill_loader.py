@@ -296,13 +296,23 @@ You: exec("brew install steipete/tap/gifgrep") → ✅ SUCCESS
 You: exec("gifgrep banana") → ✅ SUCCESS
 You: Return GIFs to user
 
+User: "pon música" / "play music"
+You: exec("spogo play 'Peso Pluma'") → ❌ "command not found"
+You: exec("brew install steipete/tap/spogo") → ✅ SUCCESS
+You: exec("spogo play 'Peso Pluma'") → ✅ SUCCESS
+You: Return song to user
+
+User: "check PR"
+You: exec("gh pr status") → ❌ "command not found"
+You: exec("brew install gh") → ✅ SUCCESS
+
 **SKILL → INSTALL COMMAND MAPPING**:
 - gifgrep → brew install steipete/tap/gifgrep
+- spogo → brew install steipete/tap/spogo
 - gh → brew install gh
 - ripgrep → brew install ripgrep
 - fd → brew install fd
 - fzf → brew install fzf
-- spogo → brew install spogo
 
 FOLLOW THIS PATTERN ALWAYS.
 
