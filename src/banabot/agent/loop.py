@@ -29,6 +29,7 @@ from banabot.bus.events import InboundMessage, OutboundMessage
 from banabot.bus.queue import MessageBus
 from banabot.providers.base import LLMProvider
 from banabot.session.manager import Session, SessionManager
+from banabot.v2.skills.skill_loader import SkillLoader
 
 
 class AgentLoop:
@@ -77,8 +78,12 @@ class AgentLoop:
         self.restrict_to_workspace = restrict_to_workspace
         self.timezone = timezone
 
-        self.context = ContextBuilder(workspace)
+        # Skill loader v2 (XML format) - init BEFORE context
+        self.skill_loader = SkillLoader(workspace / "skills")
+
+        self.context = ContextBuilder(workspace, v2_skill_loader=self.skill_loader)
         self.sessions = session_manager or SessionManager(workspace)
+
         self.tools = ToolRegistry()
         self.subagents = SubagentManager(
             provider=provider,
@@ -141,6 +146,16 @@ class AgentLoop:
         from banabot.agent.tools.weather import WeatherTool
 
         self.tools.register(WeatherTool())
+
+        # Skill tools (v2 - XML format)
+        from banabot.agent.tools.clawhub_install import ClawHubInstallTool
+        from banabot.agent.tools.skill_tool import SkillReadTool, SkillRouterTool
+
+        self.tools.register(SkillRouterTool(skill_loader=self.skill_loader))
+        self.tools.register(SkillReadTool(skill_loader=self.skill_loader))
+
+        # ClawHub install tool
+        self.tools.register(ClawHubInstallTool(workspace=self.workspace))
 
         # Message classifier for auto-learning - DISABLED TEMPORARILY
         # Problem: The LLM doesn't use classify_message correctly - it tries to use

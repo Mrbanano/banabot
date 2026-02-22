@@ -81,8 +81,17 @@ class SkillLoader:
         return skills
 
     def _get_categories(self) -> list[str]:
-        """Categorías de skills."""
-        return ["_core", "_integrations", "_tools"]
+        """Categorías de skills (built-in + cualquier subdirectorio)."""
+        base_categories = ["_core", "_integrations", "_tools"]
+
+        # Agregar cualquier subdirectorio que exista en skills_dir
+        if self.skills_dir.exists():
+            for item in self.skills_dir.iterdir():
+                if item.is_dir() and not item.name.startswith("."):
+                    if item.name not in base_categories:
+                        base_categories.append(item.name)
+
+        return base_categories
 
     def validate_skill(self, skill: Skill) -> ValidationResult:
         """Valida la estructura de un skill."""

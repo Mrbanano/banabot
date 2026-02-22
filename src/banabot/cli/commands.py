@@ -309,6 +309,59 @@ def onboard():
         console.print("  Configure later with: [cyan]banabot config[/cyan]")
 
 
+def _copy_bundled_skills(workspace_skills_dir: Path, overwrite: bool = False):
+    """Copy bundled skills v2 to workspace (package → workspace).
+
+    Bundled skills are in: src/banabot/v2/skills/
+    Workspace skills are in: ~/.banabot/workspace/skills/
+    """
+    import shutil
+
+    # Get bundled skills path (relative to this file)
+    # commands.py is in banabot/cli/commands.py
+    # bundled skills are in banabot/v2/skills/
+    bundled_skills = Path(__file__).parent.parent / "v2" / "skills"
+
+    if not bundled_skills.exists():
+        console.print(f"  [yellow]No bundled skills found at {bundled_skills}[/yellow]")
+        return
+
+    # Categories to copy
+    categories = ["_core", "_integrations", "_tools"]
+
+    for category in categories:
+        src = bundled_skills / category
+        dst = workspace_skills_dir / category
+
+        if not src.exists():
+            continue
+
+        # Create destination directory
+        dst.mkdir(parents=True, exist_ok=True)
+
+        # Copy each skill directory
+        for skill_dir in src.iterdir():
+            if not skill_dir.is_dir():
+                continue
+
+            skill_name = skill_dir.name
+            dst_skill = dst / skill_name
+
+            # Check if should copy (overwrite or not exists)
+            should_copy = overwrite or not dst_skill.exists()
+
+            if should_copy:
+                if dst_skill.exists():
+                    shutil.rmtree(dst_skill)
+                shutil.copytree(skill_dir, dst_skill)
+                action = (
+                    "Updated"
+                    if (workspace_skills_dir / category / skill_name).exists()
+                    else "Copied"
+                )
+                console.print(f"  [dim]{action} skill: {category}/{skill_name}[/dim]")
+
+
 def _create_workspace_templates(workspace: Path, overwrite: bool = False):
     """Create default workspace template files."""
     templates = {
@@ -397,6 +450,9 @@ This file stores important information that should persist across sessions.
     # Create skills directory for custom user skills
     skills_dir = workspace / "skills"
     skills_dir.mkdir(exist_ok=True)
+
+    # Copy bundled skills v2 to workspace (if not exists)
+    _copy_bundled_skills(skills_dir, overwrite)
 
     # Create profile.json for onboarding state
     import json
