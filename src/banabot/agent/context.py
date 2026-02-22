@@ -168,6 +168,25 @@ IMMEDIATELY call profile action=set_user_field - do NOT respond first
 
 ## EXECUTE IMMEDIATELY (MUST)
 If you say "guardaré" or "voy a guardar" but don't call profile tool → YOU FAILED
+
+## Location Confirmation (CRITICAL for Weather)
+Before getting weather, you MUST check the user's location:
+
+1. If user_fields.location is UNKNOWN:
+   → Ask "¿En qué ciudad estás?" or "¿Dónde vives?"
+   → Wait for answer, then save with profile action=set_user_field key=location
+
+2. If user_fields.location EXISTS (like "Puebla" or "CDMX"):
+   → Ask confirmation: "Sigues en (su ciudad)?" before using weather tool
+   → Wait for "sí" or "si" before using weather tool
+
+Example:
+- User: "¿Qué clima hace?"
+- Bot: "¿En qué ciudad estás?" (NOT weather yet)
+- User: "Puebla"
+- Bot: [saves location] → [uses weather tool]
+
+NEVER assume location without asking. This applies to weather, distances, local searches.
 """
 
     def _load_profile(self) -> dict[str, Any]:

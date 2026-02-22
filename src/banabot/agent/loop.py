@@ -137,6 +137,11 @@ class AgentLoop:
         # Profile tool (for onboarding and user preferences)
         self.tools.register(ProfileTool(workspace=self.workspace))
 
+        # Weather tool (wttr.in + Open-Meteo)
+        from banabot.agent.tools.weather import WeatherTool
+
+        self.tools.register(WeatherTool())
+
         # Message classifier for auto-learning - DISABLED TEMPORARILY
         # Problem: The LLM doesn't use classify_message correctly - it tries to use
         # the JSON output as a format string, causing errors like:

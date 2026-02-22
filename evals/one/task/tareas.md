@@ -1,6 +1,43 @@
 # Tareas - BanaBot Fixes
 
-## Tarea 1: Agregar Honesty Rule al System Prompt
+## ✅ COMPLETADAS
+
+### Tarea 1: Honesty Rule
+✅ HECHO - Commiteado
+
+### Tarea 2: Learning Rule  
+✅ HECHO - Commiteado
+
+### Tarea 3: Consolidación de Memoria
+✅ HECHO - Arreglado el bug de consolidación
+
+### Tarea 4: Reducir memory_window
+✅ HECHO - Cambiado de 50 a 25
+
+---
+
+## ❌ PENDIENTES (Clima - Ver tarea_unificada.md)
+
+### Tarea 5: Marcar Weather Skill como Always
+**Reemplazada por:** Tarea 6 (WeatherTool nativa)
+
+### Tarea 6: Crear WeatherTool Nativa
+❌ PENDIENTE - Código listo en este archivo pero NO implementado
+
+### Tarea 7: Agregar Location al Profile
+✅ HECHO - El LLM ya guarda location (funcionalidad implícita)
+
+### Tarea 8: Instrucciones de Location
+❌ PENDIENTE
+
+### Tarea 9: Agregar año actual a búsquedas
+❌ PENDIENTE
+
+### Tarea 10: Confirmación de Acciones
+✅ PARCIAL - El bot ya confirma "He guardado..."
+
+### Tarea 11: Solicitar Ubicación para Clima
+❌ PENDIENTE - Código listo pero NO implementado
 **Prioridad:** 🔴 ALTA  
 **Archivo:** `src/banabot/agent/context.py`  
 **Líneas aprox:** 130-140
