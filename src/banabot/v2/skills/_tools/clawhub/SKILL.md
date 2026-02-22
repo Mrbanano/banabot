@@ -38,8 +38,15 @@ clawhub search "postgres backups"
 Install:
 
 ```bash
-clawhub install my-skill
-clawhub install my-skill --version 1.2.3
+# Run from your workspace ROOT (where skills/ folder is)
+cd ~/.banabot/workspace
+
+# Install skill to current directory (NOT to skills/ subfolder)
+clawhub install my-skill --dir .
+clawhub install my-skill --dir . --version 1.2.3
+
+# Alternative: use environment variable
+CLAWHUB_WORKDIR=. clawhub install my-skill
 ```
 
 Update (hash-based match + upgrade):
@@ -67,5 +74,8 @@ clawhub publish ./my-skill --slug my-skill --name "My Skill" --version 1.2.0 --c
 Notes:
 
 - Default registry: https://clawhub.com (override with CLAWHUB_REGISTRY or --registry)
-- Default workdir: cwd (falls back to workspace); install dir: ./skills (override with --workdir / --dir / CLAWHUB_WORKDIR)
+- **IMPORTANT**: Always run from workspace ROOT, NOT from skills/ folder
+- Use `--dir .` to install to current directory (NOT ./skills subfolder)
+- Default workdir: cwd (falls back to workspace); install dir: ./skills
+- Override with: --dir . or CLAWHUB_WORKDIR=.
 - Update command hashes local files, resolves matching version, and upgrades to latest unless --version is set

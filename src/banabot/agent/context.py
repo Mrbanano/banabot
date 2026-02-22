@@ -5,10 +5,13 @@ import json
 import mimetypes
 import platform
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from banabot.agent.memory import MemoryStore
 from banabot.agent.skills import SkillsLoader
+
+if TYPE_CHECKING:
+    from banabot.v2.skills.skill_loader import SkillLoader as V2SkillLoader
 
 
 class ContextBuilder:
@@ -21,10 +24,11 @@ class ContextBuilder:
 
     BOOTSTRAP_FILES = ["AGENTS.md", "SOUL.md", "USER.md", "TOOLS.md", "IDENTITY.md"]
 
-    def __init__(self, workspace: Path):
+    def __init__(self, workspace: Path, v2_skill_loader: "V2SkillLoader | None" = None):
         self.workspace = workspace
         self.memory = MemoryStore(workspace)
         self.skills = SkillsLoader(workspace)
+        self.v2_skill_loader = v2_skill_loader
         self._profile_path = workspace / "profile.json"
 
     def build_system_prompt(self, skill_names: list[str] | None = None) -> str:
@@ -64,18 +68,25 @@ class ContextBuilder:
         if memory:
             parts.append(f"# Memory\n\n{memory}")
 
-        # Skills - progressive loading
-        # 1. Always-loaded skills: include full content
-        always_skills = self.skills.get_always_skills()
-        if always_skills:
-            always_content = self.skills.load_skills_for_context(always_skills)
-            if always_content:
-                parts.append(f"# Active Skills\n\n{always_content}")
+        # Skills v2 (XML format with skill_router tool)
+        if self.v2_skill_loader:
+            v2_skills = self.v2_skill_loader.format_for_prompt()
+            if v2_skills:
+                parts.append(v2_skills)
+        else:
+            # Legacy skills format
+            # Skills - progressive loading
+            # 1. Always-loaded skills: include full content
+            always_skills = self.skills.get_always_skills()
+            if always_skills:
+                always_content = self.skills.load_skills_for_context(always_skills)
+                if always_content:
+                    parts.append(f"# Active Skills\n\n{always_content}")
 
-        # 2. Available skills: only show summary (agent uses read_file to load)
-        skills_summary = self.skills.build_skills_summary()
-        if skills_summary:
-            parts.append(f"""# Skills
+            # 2. Available skills: only show summary (agent uses read_file to load)
+            skills_summary = self.skills.build_skills_summary()
+            if skills_summary:
+                parts.append(f"""# Skills
 
 The following skills extend your capabilities. To use a skill, read its SKILL.md file using the read_file tool.
 Skills with available="false" need dependencies installed first - you can try installing them with apt/brew.
