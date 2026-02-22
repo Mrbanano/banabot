@@ -1,7 +1,24 @@
 ---
 name: memory
 description: "Two-layer memory system with grep-based recall. MEMORY.md for long-term facts, HISTORY.md for event log."
-keywords: [memory, history, facts, context, recall]
+keywords:
+  [
+    memory,
+    history,
+    facts,
+    context,
+    recall,
+    remember,
+    store,
+    save,
+    recordar,
+    memoria,
+    historico,
+    guardar,
+    guarda,
+    recuerda,
+    recuérdame,
+  ]
 always: true
 ---
 
@@ -23,6 +40,7 @@ Use the `exec` tool to run grep. Combine patterns: `grep -iE "meeting|deadline" 
 ## When to Update MEMORY.md
 
 Write important facts immediately using `edit_file` or `write_file`:
+
 - User preferences ("I prefer dark mode")
 - Project context ("The API uses OAuth2")
 - Relationships ("Alice is the project lead")

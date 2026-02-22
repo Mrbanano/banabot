@@ -1,7 +1,8 @@
 ---
 name: spotify
 description: "Terminal Spotify playback/search via spogo (preferred) or spotify_player."
-keywords: [spotify, music, player, playback]
+keywords:
+  [spotify, music, player, playback, musica, reproduccion, cancion, artista]
 metadata:
   openclaw:
     emoji: "🎵"
@@ -33,6 +34,7 @@ Use `spogo` **(preferred)** for Spotify playback/search. Fall back to `spotify_p
 ## Setup
 
 Import cookies from browser:
+
 ```bash
 spogo auth import --browser chrome
 ```
