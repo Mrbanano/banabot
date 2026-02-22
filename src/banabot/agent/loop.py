@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Awaitable, Callable
 
 if TYPE_CHECKING:
-    from banabot.config.schema import ExecToolConfig, WebSearchConfig
+    from banabot.config.schema import ExecToolConfig, SemanticMemoryConfig, WebSearchConfig
     from banabot.cron.service import CronService
 
 import json_repair
@@ -61,8 +61,9 @@ class AgentLoop:
         session_manager: SessionManager | None = None,
         mcp_servers: dict | None = None,
         timezone: str = "America/Mexico_City",
+        semantic_memory_config: "SemanticMemoryConfig | None" = None,
     ):
-        from banabot.config.schema import ExecToolConfig, WebSearchConfig
+        from banabot.config.schema import ExecToolConfig, SemanticMemoryConfig, WebSearchConfig
 
         self.bus = bus
         self.provider = provider
@@ -77,6 +78,14 @@ class AgentLoop:
         self.cron_service = cron_service
         self.restrict_to_workspace = restrict_to_workspace
         self.timezone = timezone
+        self.semantic_memory_config = semantic_memory_config or SemanticMemoryConfig()
+
+        if self.semantic_memory_config.enabled:
+            from banabot.agent.semantic_memory import SemanticMemoryStore
+
+            self.semantic_memory = SemanticMemoryStore(workspace, self.semantic_memory_config)
+        else:
+            self.semantic_memory = None
 
         # Skill loader v2 (XML format) - init BEFORE context
         self.skill_loader = SkillLoader(workspace / "skills")
@@ -356,6 +365,19 @@ class AgentLoop:
             self.sessions.save(session)
             self.sessions.invalidate(session.key)
 
+            # Save session memory hook
+            from banabot.agent.hooks.session_memory import save_session_memory
+
+            asyncio.create_task(
+                save_session_memory(
+                    workspace=self.workspace,
+                    session_key=session.key,
+                    messages=messages_to_archive,
+                    provider=self.provider if hasattr(self, "provider") else None,
+                    model=self.model if hasattr(self, "model") else None,
+                )
+            )
+
             async def _consolidate_and_cleanup():
                 temp_session = Session(key=session.key)
                 temp_session.messages = messages_to_archive
@@ -375,6 +397,20 @@ class AgentLoop:
             )
 
         if len(session.messages) > self.memory_window:
+            # Run pre-compaction memory flush before consolidation
+            if self.semantic_memory and self.semantic_memory.is_available:
+                from banabot.agent.memory_flush import run_memory_flush
+
+                asyncio.create_task(
+                    run_memory_flush(
+                        workspace=self.workspace,
+                        session=session,
+                        provider=self.provider,
+                        model=self.model,
+                        config=self.semantic_memory_config,
+                    )
+                )
+
             asyncio.create_task(self._consolidate_memory(session))
 
         self._set_tool_context(msg.channel, msg.chat_id)
@@ -517,11 +553,13 @@ class AgentLoop:
         conversation = "\n".join(lines)
         current_memory = memory.read_long_term()
 
-        prompt = f"""You are a memory consolidation agent. Process this conversation and return a JSON object with exactly two keys:
+        prompt = f"""You are a memory consolidation agent. Process this conversation and return a JSON object with exactly three keys:
 
 1. "history_entry": A paragraph (2-5 sentences) summarizing the key events/decisions/topics. Start with a timestamp like [YYYY-MM-DD HH:MM]. Include enough detail to be useful when found by grep search later.
 
 2. "memory_update": The updated long-term memory content. Add any new facts: user location, preferences, personal info, habits, project context, technical decisions, tools/services used. If nothing new, return the existing content unchanged.
+
+3. "episodes": A list of 0-5 short strings, each a single important event (e.g., "user went to Oaxaca", "configured cron for 9am", "asked about Pi 4"). If none relevant, return an empty list.
 
 ## Current Long-term Memory
 {current_memory or "(empty)"}
@@ -578,9 +616,32 @@ Respond with ONLY valid JSON, no markdown fences."""
 
             if entry := result.get("history_entry"):
                 memory.append_history(str(entry))
+                if self.semantic_memory and self.semantic_memory.is_available:
+                    self.semantic_memory.save(
+                        content=str(entry),
+                        type="summary",
+                        expires_days=self.semantic_memory_config.summary_ttl_days,
+                    )
             if update := result.get("memory_update"):
                 if str(update) != current_memory:
                     memory.write_long_term(str(update))
+                    if self.semantic_memory and self.semantic_memory.is_available:
+                        facts = self._extract_facts_from_memory(str(update), current_memory or "")
+                        for fact in facts:
+                            self.semantic_memory.save(
+                                content=fact,
+                                type="fact",
+                                expires_days=self.semantic_memory_config.fact_ttl_days,
+                            )
+
+            if episodes := result.get("episodes", []):
+                if self.semantic_memory and self.semantic_memory.is_available:
+                    for ep in episodes:
+                        self.semantic_memory.save(
+                            content=str(ep),
+                            type="episodic",
+                            expires_days=self.semantic_memory_config.episodic_ttl_days,
+                        )
 
             if archive_all:
                 session.last_consolidated = 0
@@ -591,6 +652,19 @@ Respond with ONLY valid JSON, no markdown fences."""
             )
         except Exception as e:
             logger.error(f"Memory consolidation failed: {e}")
+
+    def _extract_facts_from_memory(self, new_memory: str, old_memory: str) -> list[str]:
+        """Extract new facts from memory update by comparing with old memory."""
+        if not new_memory or not old_memory:
+            return []
+        if new_memory == old_memory:
+            return []
+
+        old_lines = set(line.strip() for line in old_memory.split("\n") if line.strip())
+        new_lines = set(line.strip() for line in new_memory.split("\n") if line.strip())
+
+        new_facts = new_lines - old_lines
+        return [fact for fact in new_facts if len(fact) > 3]
 
     async def process_direct(
         self,
