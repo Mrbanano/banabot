@@ -90,7 +90,11 @@ class AgentLoop:
         # Skill loader v2 (XML format) - init BEFORE context
         self.skill_loader = SkillLoader(workspace / "skills")
 
-        self.context = ContextBuilder(workspace, v2_skill_loader=self.skill_loader)
+        self.context = ContextBuilder(
+            workspace,
+            v2_skill_loader=self.skill_loader,
+            semantic_memory=self.semantic_memory if hasattr(self, "semantic_memory") else None,
+        )
         self.sessions = session_manager or SessionManager(workspace)
 
         self.tools = ToolRegistry()

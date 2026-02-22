@@ -24,11 +24,17 @@ class ContextBuilder:
 
     BOOTSTRAP_FILES = ["AGENTS.md", "SOUL.md", "USER.md", "TOOLS.md", "IDENTITY.md"]
 
-    def __init__(self, workspace: Path, v2_skill_loader: "V2SkillLoader | None" = None):
+    def __init__(
+        self,
+        workspace: Path,
+        v2_skill_loader: "V2SkillLoader | None" = None,
+        semantic_memory: Any = None,
+    ):
         self.workspace = workspace
         self.memory = MemoryStore(workspace)
         self.skills = SkillsLoader(workspace)
         self.v2_skill_loader = v2_skill_loader
+        self.semantic_memory = semantic_memory
         self._profile_path = workspace / "profile.json"
 
     def build_system_prompt(self, skill_names: list[str] | None = None) -> str:
@@ -263,6 +269,13 @@ NEVER assume location without asking. This applies to weather, distances, local 
 
         # System prompt
         system_prompt = self.build_system_prompt(skill_names)
+
+        # Add semantic memory context if available
+        if self.semantic_memory and self.semantic_memory.is_available:
+            episodic_context = self._build_episodic_context(current_message)
+            if episodic_context:
+                system_prompt += episodic_context
+
         if channel and chat_id:
             system_prompt += f"\n\n## Current Session\nChannel: {channel}\nChat ID: {chat_id}"
         messages.append({"role": "system", "content": system_prompt})
@@ -275,6 +288,31 @@ NEVER assume location without asking. This applies to weather, distances, local 
         messages.append({"role": "user", "content": user_content})
 
         return messages
+
+    def _build_episodic_context(self, query: str) -> str | None:
+        """Build episodic memory context from semantic search."""
+        if not self.semantic_memory or not self.semantic_memory.is_available:
+            return None
+
+        try:
+            results = self.semantic_memory.recall(
+                query,
+                k=self.semantic_memory.config.max_recall,
+                min_score=self.semantic_memory.config.min_score,
+            )
+            if not results:
+                return None
+
+            lines = ["\n\n## Episodic Memory (relevant to current conversation)"]
+            for r in results:
+                score_bar = "█" * int(r["score"] * 10)
+                lines.append(
+                    f"- [{r['type']}] {r['content']} (relevance: {score_bar} {r['score']})"
+                )
+
+            return "\n".join(lines)
+        except Exception:
+            return None
 
     def _build_user_content(self, text: str, media: list[str] | None) -> str | list[dict[str, Any]]:
         """Build user message content with optional base64-encoded images."""
