@@ -1,3 +1,4 @@
+import json
 import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -148,3 +149,80 @@ class SkillLoader:
         """Recarga todos los skills (invalida cache)."""
         self._cache = {}
         return self.load_all()
+
+
+@dataclass
+class SkillMatch:
+    """Resultado de matching de un skill."""
+
+    skill: Optional[str]
+    confidence: float
+    reason: str
+
+
+class SkillRouter:
+    """Router que decide qué skill usar basándose en keywords."""
+
+    def __init__(self, loader: SkillLoader):
+        self.loader = loader
+        self._skills: Optional[dict[str, Skill]] = None
+
+    @property
+    def skills(self) -> dict[str, Skill]:
+        if self._skills is None:
+            self._skills = self.loader.load_all()
+        return self._skills
+
+    def route(self, message: str) -> SkillMatch:
+        """
+        Analiza un mensaje y decide qué skill usar.
+
+        Args:
+            message: Mensaje del usuario
+
+        Returns:
+            SkillMatch con el skill seleccionado, confianza y razón
+        """
+        message_lower = message.lower()
+
+        # Scoring por keywords
+        scores: dict[str, float] = {}
+
+        for name, skill in self.skills.items():
+            score = 0.0
+            for keyword in skill.keywords:
+                if keyword.lower() in message_lower:
+                    score += 1.0
+
+            if score > 0:
+                scores[name] = score  # No normalizar por keywords
+
+        if not scores:
+            return SkillMatch(
+                skill=None, confidence=0.0, reason="No skill matches found - general conversation"
+            )
+
+        # Seleccionar el mejor scoring
+        best_skill = max(scores.items(), key=lambda x: x[1])[0]
+        best_score = scores[best_skill]
+
+        # Confidence basada en score
+        confidence = min(best_score / 3.0, 1.0)
+
+        if confidence < 0.1:
+            return SkillMatch(
+                skill=None, confidence=0.0, reason="Low confidence - might be general conversation"
+            )
+
+        return SkillMatch(
+            skill=best_skill,
+            confidence=confidence,
+            reason=f"Matched {int(best_score)} keywords for skill '{best_skill}'",
+        )
+
+    def route_json(self, message: str) -> str:
+        """Retorna el resultado como JSON."""
+        match = self.route(message)
+        return json.dumps(
+            {"skill": match.skill, "confidence": match.confidence, "reason": match.reason}
+        )

@@ -188,10 +188,10 @@ xurl               → URL expander
 ### Skills de BanaBot (8)
 
 ```
-clawhub              → (vacío, no implementado)
+clawhub              → 
 cron                 → Cron jobs (básico)
 github               → GitHub CLI (48 líneas)
-memory               → Memoria (vacío)
+memory               → Memoria
 skill-creator       → Crear skills (básico)
 summarize           → Resumir URLs (básico)
 tmux                → Tmux (básico)
@@ -284,6 +284,8 @@ weather             → Clima (básico)
 - notion        → API
 - obsidian      → vault
 - file-manager  → glob, grep, find
+- spotify       -> 
+- gifgrep              → Buscar GIFs
 ```
 
 ### Nivel 2: Medio (NECESARIO)
@@ -291,12 +293,11 @@ weather             → Clima (básico)
 ```python
 # Mejorar skills existentes:
 - github        → 48 → 150 líneas
-- weather       → básico → completo
+- weather       → básico → completo (creo que son iguales eh )
 - summarize     → básico → con múltiples fuentes
 
 # Agregar skills complejos:
-- coding-agent  → 284 líneas como OpenCLAW
-- web-research → búsqueda avanzada
+- coding-agent  → 284 líneas como OpenCLAW (opcional)
 ```
 
 ### Nivel 3: Avanzado (SI QUIERES IGUALAR)

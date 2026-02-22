@@ -1,7 +1,23 @@
 ---
 name: file-manager
 description: "File operations: glob patterns, content search (grep), find files, read/write/edit files."
-keywords: [file, glob, grep, find, search, edit, read, write]
+keywords:
+  [
+    file,
+    glob,
+    grep,
+    find,
+    search,
+    edit,
+    read,
+    write,
+    archivo,
+    buscar,
+    editar,
+    leer,
+    escribir,
+    archivos,
+  ]
 metadata:
   openclaw:
     emoji: "📁"
@@ -32,6 +48,7 @@ File operations: search, read, write, edit using CLI tools.
 ## Glob (fd)
 
 Find files by pattern:
+
 ```bash
 fd "*.py"                    # All Python files in current dir
 fd "*.md" --full-path docs/  # In specific path
@@ -42,6 +59,7 @@ fd --type d --max-depth 3     # Directories only, max 3 levels
 ## Search content (ripgrep)
 
 Search inside files:
+
 ```bash
 rg "pattern"                 # Search in current dir
 rg "pattern" --type py       # Python files only
@@ -55,6 +73,7 @@ rg "pattern" --no-ignore    # Include ignored files (.gitignore)
 ## Find (fd + fzf)
 
 Interactive file picker:
+
 ```bash
 fd | fzf                     # Pick any file
 fd -e md | fzf | xargs cat   # Pick and read

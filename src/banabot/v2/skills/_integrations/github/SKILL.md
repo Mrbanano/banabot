@@ -1,7 +1,23 @@
 ---
 name: github
 description: "GitHub operations via `gh` CLI: issues, PRs, CI runs, code review, API queries. Use when: (1) checking PR status or CI, (2) creating/commenting on issues, (3) listing/filtering PRs or issues, (4) viewing run logs. NOT for: local git operations (use git directly), non-GitHub repos, or when gh auth is not configured."
-keywords: [github, pr, issue, ci, workflow, repo, pull-request]
+keywords:
+  [
+    github,
+    pr,
+    issue,
+    ci,
+    workflow,
+    repo,
+    pull-request,
+    issues,
+    prs,
+    commits,
+    repository,
+    repositorio,
+    problemas,
+    solicitudes,
+  ]
 metadata:
   openclaw:
     emoji: "🐙"

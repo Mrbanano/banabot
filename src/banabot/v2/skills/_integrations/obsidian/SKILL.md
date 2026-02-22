@@ -1,7 +1,17 @@
 ---
 name: obsidian
 description: "Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli."
-keywords: [obsidian, notes, vault, markdown, knowledge-base]
+keywords:
+  [
+    obsidian,
+    notes,
+    vault,
+    markdown,
+    knowledge-base,
+    notas,
+    bovedas,
+    conocimiento,
+  ]
 metadata:
   openclaw:
     emoji: "💎"
@@ -35,6 +45,7 @@ Obsidian desktop tracks vaults here:
 ## Quick start
 
 Set a default vault (once):
+
 ```bash
 obsidian-cli set-default "<vault-folder-name>"
 obsidian-cli print-default --path-only
@@ -58,6 +69,7 @@ obsidian-cli create "Folder/New note" --content "..." --open
 ```bash
 obsidian-cli move "old/path/note" "new/path/note"
 ```
+
 Updates `[[wikilinks]]` and Markdown links across the vault.
 
 ## Delete
