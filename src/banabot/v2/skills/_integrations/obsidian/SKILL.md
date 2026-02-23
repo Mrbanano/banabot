@@ -23,6 +23,11 @@ metadata:
         formula: yakitrak/yakitrak/obsidian-cli
         bins: ["obsidian-cli"]
         label: "Install obsidian-cli (brew)"
+      - id: npm
+        kind: npm
+        package: obsidian-cli
+        bins: ["obsidian-cli"]
+        label: "Install obsidian-cli (npm) - Linux/Windows"
 ---
 
 # Obsidian

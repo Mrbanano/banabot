@@ -39,6 +39,21 @@ metadata:
         formula: fzf
         bins: ["fzf"]
         label: "Install fzf (brew)"
+      - id: apt
+        kind: apt
+        package: ripgrep
+        bins: ["rg"]
+        label: "Install ripgrep (apt)"
+      - id: apt
+        kind: apt
+        package: fd-find
+        bins: ["fd"]
+        label: "Install fd (apt)"
+      - id: apt
+        kind: apt
+        package: fzf
+        bins: ["fzf"]
+        label: "Install fzf (apt)"
 ---
 
 # File Manager

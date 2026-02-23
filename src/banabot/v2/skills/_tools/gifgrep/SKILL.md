@@ -18,6 +18,11 @@ metadata:
         module: github.com/steipete/gifgrep/cmd/gifgrep@latest
         bins: ["gifgrep"]
         label: "Install gifgrep (go)"
+      - id: go
+        kind: go
+        module: github.com/steipete/gifgrep/cmd/gifgrep@latest
+        bins: ["gifgrep"]
+        label: "Install gifgrep (go) - Linux/Windows"
 ---
 
 # gifgrep
