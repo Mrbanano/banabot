@@ -1,11 +1,12 @@
 ---
 name: spotify
-description: "Terminal Spotify playback/search via spogo (preferred) or spotify_player."
+description: "Terminal Spotify playback/search via spogo (macOS only)."
 keywords:
   [spotify, music, player, playback, musica, reproduccion, cancion, artista]
 metadata:
   openclaw:
     emoji: "🎵"
+    os: [darwin]
     requires:
       anyBins: ["spogo", "spotify_player"]
     install:
@@ -14,12 +15,12 @@ metadata:
         formula: spogo
         tap: steipete/tap
         bins: ["spogo"]
-        label: "Install spogo (brew)"
+        label: "Install spogo (brew) - macOS only"
       - id: brew
         kind: brew
         formula: spotify_player
         bins: ["spotify_player"]
-        label: "Install spotify_player (brew)"
+        label: "Install spotify_player (brew) - macOS only"
 ---
 
 # Spotify (spogo / spotify_player)
