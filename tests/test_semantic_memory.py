@@ -6,6 +6,17 @@ from pathlib import Path
 import pytest
 
 
+def is_fastembed_available():
+    """Check if fastembed and usearch are available."""
+    try:
+        from fastembed import TextEmbedding  # noqa: F401
+        from usearch.index import Index  # noqa: F401
+
+        return True
+    except ImportError:
+        return False
+
+
 class TestSemanticMemoryStore:
     """Tests for SemanticMemoryStore."""
 
@@ -18,6 +29,9 @@ class TestSemanticMemoryStore:
     @pytest.fixture
     def store(self, workspace):
         """Create semantic memory store."""
+        pytest.importorskip("fastembed", reason="fastembed not installed")
+        pytest.importorskip("usearch", reason="usearch not installed")
+
         from banabot.agent.semantic_memory import SemanticMemoryStore
         from banabot.config.schema import SemanticMemoryConfig
 

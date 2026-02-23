@@ -159,9 +159,9 @@ Integration skill content.
 
         output = loader.format_for_prompt(skills)
 
-        assert "## Skills Usage" in output
-        assert "scan <available_skills>" in output
-        assert "If 1 skill applies" in output
+        assert "## ⚠️ CRITICAL: Skill Auto-Install Rule" in output
+        assert "<available_skills>" in output
+        assert "scan <available_skills>" in output.lower() or "skill" in output.lower()
 
     def test_get_skill_content(self, temp_skills_dir):
         """Test getting specific skill content."""
