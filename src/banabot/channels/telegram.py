@@ -127,6 +127,7 @@ class TelegramChannel(BaseChannel):
         self.config: TelegramConfig = config
         self.groq_api_key = groq_api_key
         self._app: Application | None = None
+        self._bot_id: int | None = None  # Bot's own ID to detect echo
         self._chat_ids: dict[str, int] = {}  # Map sender_id to chat_id for replies
         self._typing_tasks: dict[str, asyncio.Task] = {}  # chat_id -> typing loop task
 
@@ -178,6 +179,7 @@ class TelegramChannel(BaseChannel):
 
         # Get bot info and register command menu
         bot_info = await self._app.bot.get_me()
+        self._bot_id = bot_info.id  # Store bot ID to detect own messages
         logger.info(f"Telegram bot @{bot_info.username} connected")
 
         try:
@@ -315,7 +317,7 @@ class TelegramChannel(BaseChannel):
         sender_id = self._sender_id(user)
 
         # Ignore messages from the bot itself (prevents cron echo loops)
-        if str(chat_id) == str(self._bot.id):
+        if self._bot_id and chat_id == self._bot_id:
             logger.debug("Telegram: ignoring message from bot itself")
             return
 
