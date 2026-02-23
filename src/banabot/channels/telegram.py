@@ -314,6 +314,11 @@ class TelegramChannel(BaseChannel):
         chat_id = message.chat_id
         sender_id = self._sender_id(user)
 
+        # Ignore messages from the bot itself (prevents cron echo loops)
+        if str(chat_id) == str(self._bot.id):
+            logger.debug("Telegram: ignoring message from bot itself")
+            return
+
         # Store chat_id for replies
         self._chat_ids[sender_id] = chat_id
 
