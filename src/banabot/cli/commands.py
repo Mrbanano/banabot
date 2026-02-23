@@ -312,6 +312,20 @@ def onboard():
 
     if enable_semantic:
         config.agents.defaults.semantic_memory = SemanticMemoryConfig(enabled=True)
+
+        # Install dependencies automatically
+        console.print("  📦 Installing fastembed & usearch...")
+        import subprocess
+
+        result = subprocess.run(
+            ["uv", "pip", "install", "fastembed", "usearch"],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode == 0:
+            console.print("  [green]✓[/green] Dependencies installed")
+        else:
+            console.print(f"  [yellow]⚠[/yellow] Install failed: {result.stderr[:100]}")
         console.print("  [green]✓[/green] Memoria mejorada activada")
     else:
         config.agents.defaults.semantic_memory = SemanticMemoryConfig(enabled=False)
