@@ -257,6 +257,12 @@ def onboard():
         workspace.mkdir(parents=True, exist_ok=True)
         console.print(f"[green]✓[/green] Created workspace at {workspace}")
 
+    # Create docs directory for session files
+    docs_dir = workspace / "docs"
+    if not docs_dir.exists():
+        docs_dir.mkdir(parents=True, exist_ok=True)
+        console.print(f"[green]✓[/green] Created docs directory at {docs_dir}")
+
     # Clear sessions and memory directories when overwriting
     if overwrite:
         sessions_dir = workspace / "sessions"
@@ -264,6 +270,13 @@ def onboard():
             for f in sessions_dir.glob("*.jsonl"):
                 f.unlink()
             console.print(f"[green]✓[/green] Cleared sessions in {sessions_dir}")
+
+        docs_dir = workspace / "docs"
+        if docs_dir.exists():
+            for f in docs_dir.glob("*"):
+                if f.is_file():
+                    f.unlink()
+            console.print(f"[green]✓[/green] Cleared docs in {docs_dir}")
 
         memory_dir = workspace / "memory"
         if memory_dir.exists():
@@ -595,6 +608,14 @@ def gateway(
     bus = MessageBus()
     provider = _make_provider(config)
     session_manager = SessionManager(config.workspace_path)
+
+    # Clear docs directory on startup (session files)
+    docs_dir = config.workspace_path / "docs"
+    if docs_dir.exists():
+        for f in docs_dir.glob("*"):
+            if f.is_file():
+                f.unlink()
+        console.print("[green]✓[/green] Cleared docs directory")
 
     # Create cron service first (callback set after agent creation)
     cron_store_path = get_data_dir() / "cron" / "jobs.json"
