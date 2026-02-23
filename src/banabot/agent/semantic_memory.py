@@ -36,7 +36,8 @@ class SemanticMemoryStore:
 
     @property
     def is_available(self) -> bool:
-        """True if fastembed and usearch are installed."""
+        """True if fastembed and usearch are available."""
+        self._ensure_ready()
         return self._model is not None
 
     def _ensure_ready(self) -> None:

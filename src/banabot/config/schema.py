@@ -188,26 +188,30 @@ class ChannelsConfig(Base):
 class SemanticMemoryConfig(Base):
     """Semantic memory configuration (optional, requires fastembed + usearch)."""
 
+    model_config = {"populate_by_name": True}
+
     enabled: bool = False
     model: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
     dimensions: int = 384
-    min_score: float = 0.3
-    max_recall: int = 5
-    cleanup_interval_hours: int = 24
-    history_max_lines: int = 500
-    session_trim_keep: int = 50
+    min_score: float = Field(default=0.3, validation_alias="minScore")
+    max_recall: int = Field(default=5, validation_alias="maxRecall")
+    cleanup_interval_hours: int = Field(default=24, validation_alias="cleanupIntervalHours")
+    history_max_lines: int = Field(default=500, validation_alias="historyMaxLines")
+    session_trim_keep: int = Field(default=50, validation_alias="sessionTrimKeep")
 
-    episodic_ttl_days: int = 30
-    summary_ttl_days: int = 90
-    fact_ttl_days: int = 180
-    user_profile_ttl_days: int | None = None
+    episodic_ttl_days: int = Field(default=30, validation_alias="episodicTtlDays")
+    summary_ttl_days: int = Field(default=90, validation_alias="summaryTtlDays")
+    fact_ttl_days: int = Field(default=180, validation_alias="factTtlDays")
+    user_profile_ttl_days: int | None = Field(default=None, validation_alias="userProfileTtlDays")
 
-    citations_enabled: bool = True
-    query_expansion: bool = False
-    mmr_enabled: bool = False
-    mmr_lambda: float = 0.7
-    temporal_decay_enabled: bool = False
-    temporal_decay_half_life_days: int = 30
+    citations_enabled: bool = Field(default=True, validation_alias="citationsEnabled")
+    query_expansion: bool = Field(default=False, validation_alias="queryExpansion")
+    mmr_enabled: bool = Field(default=False, validation_alias="mmrEnabled")
+    mmr_lambda: float = Field(default=0.7, validation_alias="mmrLambda")
+    temporal_decay_enabled: bool = Field(default=False, validation_alias="temporalDecayEnabled")
+    temporal_decay_half_life_days: int = Field(
+        default=30, validation_alias="temporalDecayHalfLifeDays"
+    )
 
 
 class AgentDefaults(Base):
@@ -215,11 +219,13 @@ class AgentDefaults(Base):
 
     workspace: str = "~/.banabot/workspace"
     model: str = "anthropic/claude-opus-4-5"
-    max_tokens: int = 8192
+    max_tokens: int = Field(default=8192, validation_alias="maxTokens")
     temperature: float = 0.7
-    max_tool_iterations: int = 20
-    memory_window: int = 25
-    semantic_memory: SemanticMemoryConfig = Field(default_factory=SemanticMemoryConfig)
+    max_tool_iterations: int = Field(default=20, validation_alias="maxToolIterations")
+    memory_window: int = Field(default=25, validation_alias="memoryWindow")
+    semantic_memory: SemanticMemoryConfig = Field(
+        default_factory=SemanticMemoryConfig, validation_alias="semanticMemory"
+    )
 
 
 class AgentsConfig(Base):
