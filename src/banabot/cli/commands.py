@@ -295,6 +295,32 @@ def onboard():
     # Create default bootstrap files
     _create_workspace_templates(workspace, overwrite=overwrite)
 
+    # Ask about enhanced memory (semantic memory)
+    console.print("\n[bold]🧠 Memoria Mejorada / Enhanced Memory[/bold]")
+    console.print(
+        "  BananaBot puede recordar conversaciones pasadas usando embeddings vectoriales."
+    )
+    console.print(
+        "  Requires: [cyan]fastembed[/cyan], [cyan]usearch[/cyan] (se instalarán automáticamente)"
+    )
+    enable_semantic = typer.confirm(
+        "  ¿Activar memoria mejorada? / Enable enhanced memory?", default=False
+    )
+
+    config = load_config()
+    from banabot.config.schema import SemanticMemoryConfig
+
+    if enable_semantic:
+        config.agents.defaults.semantic_memory = SemanticMemoryConfig(enabled=True)
+        console.print("  [green]✓[/green] Memoria mejorada activada")
+    else:
+        config.agents.defaults.semantic_memory = SemanticMemoryConfig(enabled=False)
+        console.print(
+            "  [dim]✗[/dim] Memoria mejorada desactivada (podes activarla después en config)"
+        )
+
+    save_config(config)
+
     console.print(f"\n{__logo__} banabot is ready!\n")
 
     # 🍌 Launch Banabot interactive wizard
