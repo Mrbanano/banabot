@@ -324,6 +324,18 @@ def onboard():
         )
         if result.returncode == 0:
             console.print("  [green]✓[/green] Dependencies installed")
+
+            # Download default model
+            console.print("  📥 Downloading embedding model...")
+            try:
+                from fastembed import TextEmbedding
+
+                model = TextEmbedding("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+                # Force model loading
+                list(model.embed(["test"]))
+                console.print("  [green]✓[/green] Model downloaded")
+            except Exception as e:
+                console.print(f"  [yellow]⚠[/yellow] Model download failed: {e}")
         else:
             console.print(f"  [yellow]⚠[/yellow] Install failed: {result.stderr[:100]}")
         console.print("  [green]✓[/green] Memoria mejorada activada")
