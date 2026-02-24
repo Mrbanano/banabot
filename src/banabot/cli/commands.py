@@ -512,6 +512,19 @@ This file stores important information that should persist across sessions.
         history_file.write_text("")
         console.print("  [dim]Created memory/HISTORY.md[/dim]")
 
+    # Create HEARTBEAT.md for periodic tasks
+    heartbeat_file = workspace / "HEARTBEAT.md"
+    if not heartbeat_file.exists():
+        heartbeat_file.write_text("""# Heartbeat Tasks
+
+For dynamic tasks that need to SEARCH/EVALUATE content.
+For scheduled tasks with specific times, use the 'cron' tool instead.
+
+## Tasks
+
+""")
+        console.print("  [dim]Created HEARTBEAT.md[/dim]")
+
     # Create skills directory for custom user skills
     skills_dir = workspace / "skills"
     skills_dir.mkdir(exist_ok=True)

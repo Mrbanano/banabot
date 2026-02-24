@@ -19,18 +19,34 @@ HEARTBEAT_OK_TOKEN = "HEARTBEAT_OK"
 
 
 def _is_heartbeat_empty(content: str | None) -> bool:
-    """Check if HEARTBEAT.md has no actionable content."""
+    """Check if HEARTBEAT.md has no actionable content.
+
+    Only lines starting with - or * are considered tasks.
+    Everything else (headers, descriptions, comments) is ignored.
+    """
+    import re
+
     if not content:
         return True
 
-    # Lines to skip: empty, headers, HTML comments, empty checkboxes
-    skip_patterns = {"- [ ]", "* [ ]", "- [x]", "* [x]"}
-
     for line in content.split("\n"):
-        line = line.strip()
-        if not line or line.startswith("#") or line.startswith("<!--") or line in skip_patterns:
+        stripped = line.strip()
+        # Skip empty lines, headers, comments, and horizontal rules
+        if not stripped or stripped.startswith("#") or stripped.startswith("<!--"):
             continue
-        return False  # Found actionable content
+        # Skip horizontal rules: ---, ***, ___
+        if re.match(r"^[-*_]{3,}$", stripped):
+            continue
+
+        # Match bullet points: - , * , + with optional checkbox [ ] or [x]
+        # Handles: "- task", "* task", "- [ ]", "  - task", etc.
+        bullet_match = re.match(r"^(\s*)[-*+]\s*(\[[ xX]\])?\s*(.*)$", stripped)
+        if bullet_match:
+            task_text = bullet_match.group(3).strip()
+            # Empty checkbox or empty bullet = skip
+            if not task_text:
+                continue
+            return False  # Found a real task
 
     return True
 

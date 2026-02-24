@@ -19,6 +19,7 @@ from banabot.agent.memory import MemoryStore
 from banabot.agent.subagent import SubagentManager
 from banabot.agent.tools.cron import CronTool
 from banabot.agent.tools.filesystem import EditFileTool, ListDirTool, ReadFileTool, WriteFileTool
+from banabot.agent.tools.heartbeat import HeartbeatTool
 from banabot.agent.tools.message import MessageTool
 from banabot.agent.tools.profile import ProfileTool
 from banabot.agent.tools.registry import ToolRegistry
@@ -151,6 +152,9 @@ class AgentLoop:
             from banabot.agent.tools.cron import CronTool
 
             self.tools.register(CronTool(self.cron_service, default_timezone=self.timezone))
+
+        # Heartbeat tool (for dynamic periodic tasks)
+        self.tools.register(HeartbeatTool(workspace=self.workspace))
 
         # Profile tool (for onboarding and user preferences)
         self.tools.register(ProfileTool(workspace=self.workspace))
